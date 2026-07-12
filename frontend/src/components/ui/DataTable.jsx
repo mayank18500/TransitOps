@@ -39,10 +39,10 @@ export const DataTable = ({
   };
 
   return (
-    <div className={cn('w-full overflow-x-auto rounded-l border border-border bg-bg-surface', className)} {...props}>
+    <div className={cn('card !w-full !max-w-none !transform-none !transition-none before:!content-none after:!content-none !p-0 overflow-x-auto', className)} {...props}>
       <table className="w-full border-collapse text-left text-body">
         {/* Table Header */}
-        <thead className="bg-bg-surface-elevated/70 border-b border-border text-tiny font-bold uppercase tracking-wider text-text-muted select-none sticky top-0 backdrop-blur-md z-sticky">
+        <thead className="bg-bg-base border-b-4 border-border text-tiny font-bold uppercase tracking-wider text-text-secondary select-none sticky top-0 z-sticky">
           <tr>
             {/* Selection Checkbox */}
             {onSelectAllRows && (
@@ -74,7 +74,7 @@ export const DataTable = ({
         </thead>
 
         {/* Table Body */}
-        <tbody className="divide-y divide-border-muted">
+        <tbody className="divide-y-2 divide-border">
           {isLoading ? (
             // Loading Skeletons
             Array.from({ length: 5 }).map((_, rIdx) => (

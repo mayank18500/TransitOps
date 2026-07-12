@@ -48,12 +48,12 @@ export const Modal = ({
             exit={{ opacity: 0, scale: 0.96, y: 8 }}
             transition={{ type: 'spring', stiffness: 350, damping: 25 }}
             className={cn(
-              'relative z-modal w-full max-w-lg rounded-xl border border-border bg-bg-surface p-6 shadow-modal max-h-[90vh] overflow-y-auto flex flex-col',
+              'card !relative !z-modal !w-full !max-w-lg before:!content-none after:!content-none !transform-none !transition-none hover:!transform-none hover:!shadow-[0.7em_0.7em_0_var(--shadow-color)] !max-h-[90vh] !overflow-y-auto !flex !flex-col',
               className
             )}
           >
             {/* Header */}
-            <div className="flex items-center justify-between border-b border-border-muted pb-4 mb-4">
+            <div className="flex items-center justify-between border-b-4 border-border pb-4 mb-4">
               <h3 className="text-h3 font-bold tracking-tight text-text-primary">
                 {title}
               </h3>
@@ -121,13 +121,13 @@ export const Drawer = ({
             exit={{ x: animateX }}
             transition={{ type: 'spring', stiffness: 350, damping: 28 }}
             className={cn(
-              'relative z-modal flex h-full w-full max-w-md flex-col border-l border-border bg-bg-surface p-6 shadow-modal',
-              position === 'right' ? 'ml-auto' : 'mr-auto',
+              'card !relative !z-modal !flex !h-full !w-full !max-w-md !flex-col before:!content-none after:!content-none !transform-none !transition-none hover:!transform-none hover:!shadow-[0.7em_0.7em_0_var(--shadow-color)] !rounded-none',
+              position === 'right' ? '!border-r-0 !border-t-0 !border-b-0 ml-auto' : '!border-l-0 !border-t-0 !border-b-0 mr-auto',
               className
             )}
           >
             {/* Header */}
-            <div className="flex items-center justify-between border-b border-border-muted pb-4 mb-4">
+            <div className="flex items-center justify-between border-b-4 border-border pb-4 mb-4">
               <h3 className="text-h3 font-bold tracking-tight text-text-primary">
                 {title}
               </h3>
@@ -163,7 +163,7 @@ export const ConfirmDialog = ({
     <Modal isOpen={isOpen} onClose={onClose} title={title} className="max-w-sm">
       <div className="space-y-6">
         <p className="text-body text-text-secondary">{description}</p>
-        <div className="flex items-center justify-end gap-3 border-t border-border-muted pt-4">
+        <div className="flex items-center justify-end gap-3 border-t-4 border-border pt-4">
           <Button variant="outline" size="sm" onClick={onClose}>
             {cancelText}
           </Button>

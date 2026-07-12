@@ -5,76 +5,21 @@ import AuthLayout from './layouts/AuthLayout';
 import Login from './components/Login';
 import { ProtectedRoute } from './components/ProtectedRoute';
 
-// Mock Placeholder views to verify router structure
-const DashboardPlaceholder = () => (
-  <div className="space-y-6 animate-fade-in">
-    <h2 className="text-h2 font-bold">Dashboard</h2>
-    <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
-      {[1, 2, 3, 4].map((i) => (
-        <div key={i} className="rounded-l border border-border bg-bg-surface p-6 shadow-m">
-          <div className="h-4 w-24 rounded bg-bg-surface-elevated mb-4" />
-          <div className="h-8 w-16 rounded bg-bg-surface-elevated" />
-        </div>
-      ))}
-    </div>
-  </div>
-);
-
-const VehiclesPlaceholder = () => (
-  <div className="space-y-6 animate-fade-in">
-    <h2 className="text-h2 font-bold">Vehicles Directory</h2>
-    <div className="rounded-l border border-border bg-bg-surface p-6 shadow-m">
-      <div className="h-32 rounded bg-bg-surface-elevated animate-pulse" />
-    </div>
-  </div>
-);
-
-const DriversPlaceholder = () => (
-  <div className="space-y-6 animate-fade-in">
-    <h2 className="text-h2 font-bold">Drivers Directory</h2>
-    <div className="rounded-l border border-border bg-bg-surface p-6 shadow-m">
-      <div className="h-32 rounded bg-bg-surface-elevated animate-pulse" />
-    </div>
-  </div>
-);
-
-const TripsPlaceholder = () => (
-  <div className="space-y-6 animate-fade-in">
-    <h2 className="text-h2 font-bold">Trips Management</h2>
-    <div className="rounded-l border border-border bg-bg-surface p-6 shadow-m">
-      <div className="h-32 rounded bg-bg-surface-elevated animate-pulse" />
-    </div>
-  </div>
-);
-
-const ExpensesPlaceholder = () => (
-  <div className="space-y-6 animate-fade-in">
-    <h2 className="text-h2 font-bold">Expense Ledger</h2>
-    <div className="rounded-l border border-border bg-bg-surface p-6 shadow-m">
-      <div className="h-32 rounded bg-bg-surface-elevated animate-pulse" />
-    </div>
-  </div>
-);
-
-const SettingsPlaceholder = () => (
-  <div className="space-y-6 animate-fade-in">
-    <h2 className="text-h2 font-bold">Account Settings</h2>
-    <div className="rounded-l border border-border bg-bg-surface p-6 shadow-m">
-      <div className="h-32 rounded bg-bg-surface-elevated animate-pulse" />
-    </div>
-  </div>
-);
-
-const NotFoundPlaceholder = () => (
-  <div className="flex min-h-screen flex-col items-center justify-center bg-bg-base text-center px-4">
-    <h1 className="text-display font-bold text-brand-primary">404</h1>
-    <h2 className="text-h3 font-semibold mt-4 mb-2">Page Not Found</h2>
-    <p className="text-body text-text-secondary mb-6">The requested path does not exist on TransitOps.</p>
-    <Link to="/" className="h-10 px-6 rounded-m bg-brand-primary text-brand-primary-fg font-semibold flex items-center justify-center">
-      Back to Safety
-    </Link>
-  </div>
-);
+import Dashboard from './pages/Dashboard';
+import Vehicles from './pages/Vehicles';
+import VehicleDetails from './pages/VehicleDetails';
+import VehicleRegistration from './pages/VehicleRegistration';
+import Maintenance from './pages/Maintenance';
+import Drivers from './pages/Drivers';
+import License from './pages/License';
+import Trips from './pages/Trips';
+import TripDetails from './pages/TripDetails';
+import Expenses from './pages/Expenses';
+import Fuel from './pages/Fuel';
+import Analytics from './pages/Analytics';
+import Reports from './pages/Reports';
+import Settings from './pages/Settings';
+import NotFound from './pages/NotFound';
 
 const router = createBrowserRouter([
   {
@@ -105,33 +50,65 @@ const router = createBrowserRouter([
         children: [
           {
             path: 'dashboard',
-            element: <DashboardPlaceholder />,
+            element: <Dashboard />,
           },
           {
             path: 'vehicles',
-            element: <VehiclesPlaceholder />,
+            element: <Vehicles />,
+          },
+          {
+            path: 'vehicles/new',
+            element: <VehicleRegistration />,
+          },
+          {
+            path: 'vehicles/:id',
+            element: <VehicleDetails />,
+          },
+          {
+            path: 'maintenance',
+            element: <Maintenance />,
           },
           {
             path: 'drivers',
-            element: <DriversPlaceholder />,
+            element: <Drivers />,
+          },
+          {
+            path: 'license',
+            element: <License />,
           },
           {
             path: 'trips',
-            element: <TripsPlaceholder />,
+            element: <Trips />,
+          },
+          {
+            path: 'trips/:id',
+            element: <TripDetails />,
           },
           {
             path: 'expenses',
-            element: <ExpensesPlaceholder />,
+            element: <Expenses />,
+          },
+          {
+            path: 'fuel',
+            element: <Fuel />,
+          },
+          {
+            path: 'analytics',
+            element: <Analytics />,
+          },
+          {
+            path: 'reports',
+            element: <Reports />,
           },
           {
             path: 'settings',
-            element: <SettingsPlaceholder />,
+            element: <Settings />,
           },
         ],
       },
       {
         path: '*',
-        element: <NotFoundPlaceholder />,
+        element: <NotFound />,
       },
     ],
   },

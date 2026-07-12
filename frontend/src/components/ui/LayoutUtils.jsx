@@ -47,7 +47,7 @@ export const PageHeader = ({
   return (
     <div
       className={cn(
-        'flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between mb-8 pb-6 border-b border-border-muted',
+        'flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between mb-8 pb-6 border-b-4 border-border',
         className
       )}
       {...props}
@@ -80,8 +80,8 @@ export const Divider = ({
     <div
       className={cn(
         vertical
-          ? 'w-[1px] self-stretch bg-border-muted mx-3'
-          : 'h-[1px] w-full bg-border-muted my-4',
+          ? 'w-[3px] self-stretch bg-border mx-3'
+          : 'h-[3px] w-full bg-border my-4',
         className
       )}
       {...props}

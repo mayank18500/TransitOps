@@ -42,13 +42,13 @@ export const Input = React.forwardRef(({
           ref={ref}
           type={resolvedType}
           disabled={isDisabled || isLoading}
+          style={{ '--primary': error ? 'rgb(var(--danger))' : 'rgb(var(--primary))', ...props.style }}
           className={cn(
-            'w-full h-10 bg-bg-surface-elevated text-text-primary border border-border rounded-m px-3.5 text-caption font-sans outline-none transition-all duration-fast ease-micro placeholder:text-text-disabled',
-            'focus:border-brand-primary focus:ring-1 focus:ring-brand-primary',
-            (isSearch || icon) && 'pl-10',
-            isPassword && 'pr-10',
-            error && 'border-danger focus:border-danger focus:ring-danger',
-            (isDisabled || isLoading) && 'opacity-50 cursor-not-allowed bg-bg-disabled text-text-disabled border-border-muted',
+            'brutalist-input !h-11',
+            !(isSearch || icon) && '!pl-3.5',
+            isPassword && '!pr-10',
+            error && '!border-danger',
+            (isDisabled || isLoading) && '!opacity-50 !cursor-not-allowed !bg-bg-disabled !text-text-disabled !border-border-muted',
             className
           )}
           {...props}
@@ -101,11 +101,11 @@ export const Textarea = React.forwardRef(({
         ref={ref}
         rows={rows}
         disabled={isDisabled || isLoading}
+        style={{ '--primary': error ? 'rgb(var(--danger))' : 'rgb(var(--primary))', ...props.style }}
         className={cn(
-          'w-full bg-bg-surface-elevated text-text-primary border border-border rounded-m p-3.5 text-caption font-sans outline-none transition-all duration-fast ease-micro placeholder:text-text-disabled resize-y',
-          'focus:border-brand-primary focus:ring-1 focus:ring-brand-primary',
-          error && 'border-danger focus:border-danger focus:ring-danger',
-          (isDisabled || isLoading) && 'opacity-50 cursor-not-allowed bg-bg-disabled text-text-disabled border-border-muted',
+          'brutalist-input !h-auto !py-3.5 !px-3.5 !resize-y',
+          error && '!border-danger',
+          (isDisabled || isLoading) && '!opacity-50 !cursor-not-allowed !bg-bg-disabled !text-text-disabled !border-border-muted',
           className
         )}
         {...props}

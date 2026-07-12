@@ -14,7 +14,7 @@ export const TimelineItem = ({
     <div className={cn('flex gap-4 relative pb-6', className)} {...props}>
       {/* Vertical connector line */}
       {!isLast && (
-        <span className="absolute left-[15px] top-8 bottom-0 w-[1px] bg-border-muted" />
+        <span className="absolute left-[15px] top-8 bottom-0 w-[4px] bg-border" />
       )}
 
       {/* Bullet / Node */}
@@ -68,7 +68,7 @@ export const ActivityFeed = ({
   ...props
 }) => {
   return (
-    <div className={cn('flex flex-col divide-y divide-border-muted', className)} {...props}>
+    <div className={cn('flex flex-col divide-y-4 divide-border', className)} {...props}>
       {activities.map((act) => (
         <div key={act.id} className="flex gap-3 py-3.5 first:pt-0 last:pb-0 items-start">
           {act.icon && (
