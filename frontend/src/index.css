@@ -1,3 +1,70 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer base {
+  :root {
+    /* Color System - Dark First */
+    --bg-base: 10 10 12;                  /* #0a0a0c */
+    --bg-surface: 18 18 22;               /* #121216 */
+    --bg-surface-elevated: 26 26 32;      /* #1a1a20 */
+    --bg-surface-floating: 34 34 42;      /* #22222a */
+    
+    --bg-hover-rgb: 255 255 255 / 0.04;
+    --bg-active-rgb: 255 255 255 / 0.08;
+    --bg-disabled-rgb: 255 255 255 / 0.02;
+
+    --text-primary: 243 244 246;          /* #f3f4f6 */
+    --text-secondary: 156 163 175;        /* #9ca3af */
+    --text-muted: 107 114 128;            /* #6b7280 */
+    --text-disabled: 75 85 99;            /* #4b5563 */
+
+    /* Semantic Brands */
+    --primary: 99 102 241;                /* #6366f1 Indigo-500 */
+    --primary-hover: 129 140 248;         /* #818cf8 Indigo-400 */
+    --primary-active: 79 70 229;          /* #4f46e5 Indigo-600 */
+    --primary-fg: 255 255 255;            /* #ffffff */
+
+    --success: 16 185 129;                /* #10b981 Emerald-500 */
+    --success-soft: rgba(16, 185, 129, 0.1);
+    --success-fg: 52 211 153;             /* #34d399 Emerald-400 */
+
+    --warning: 245 158 11;                /* #f59e0b Amber-500 */
+    --warning-soft: rgba(245, 158, 11, 0.1);
+    --warning-fg: 251 191 36;             /* #fbbf24 Amber-400 */
+
+    --danger: 239 68 68;                  /* #ef4444 Red-500 */
+    --danger-soft: rgba(239, 68, 68, 0.1);
+    --danger-fg: 248 113 113;             /* #f87171 Red-400 */
+
+    --info: 59 130 246;                   /* #3b82f6 Blue-500 */
+    --info-soft: rgba(59, 130, 246, 0.1);
+    --info-fg: 96 165 250;                /* #60a5fa Blue-400 */
+
+    /* Borders */
+    --border-default: rgba(255, 255, 255, 0.08);
+    --border-muted: rgba(255, 255, 255, 0.04);
+    --border-focus: rgba(255, 255, 255, 0.2);
+    --border-primary: rgba(99, 102, 241, 0.4);
+
+    /* Glassmorphism */
+    --glass-bg: rgba(10, 10, 12, 0.7);
+    --glass-border: rgba(255, 255, 255, 0.08);
+
+    /* Easing */
+    --ease-standard: cubic-bezier(0.16, 1, 0.3, 1);
+    --ease-micro: cubic-bezier(0.2, 0.8, 0.2, 1);
+    --ease-exit: cubic-bezier(0.3, 0, 0.8, 0.15);
+  }
+
+  body {
+    background-color: rgb(var(--bg-base));
+    color: rgb(var(--text-primary));
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    overflow-x: hidden;
+  }
+}
