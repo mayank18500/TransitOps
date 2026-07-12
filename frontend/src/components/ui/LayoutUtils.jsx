@@ -47,7 +47,7 @@ export const PageHeader = ({
   return (
     <div
       className={cn(
-        'flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between mb-8 pb-6 border-b-4 border-border',
+        'flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between mb-8 pb-6 border-b border-border-muted/60',
         className
       )}
       {...props}

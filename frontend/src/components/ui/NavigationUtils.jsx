@@ -141,7 +141,7 @@ export const SearchBar = ({
           value={value}
           onChange={(e) => onChange(e.target.value)}
           placeholder={placeholder}
-          className="brutalist-input !h-10 !pl-10 !text-body"
+          className="flex-1 w-full rounded-lg border border-border-default bg-bg-surface px-4 py-2 pl-10 text-body text-text-primary placeholder:text-text-muted focus:border-brand-primary focus:outline-none focus:ring-2 focus:ring-brand-primary/20 transition-all shadow-sm !h-10"
         />
       </div>
       {onFilterToggle && (

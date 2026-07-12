@@ -8,13 +8,14 @@ import { ProtectedRoute } from './components/ProtectedRoute';
 import Dashboard from './pages/Dashboard';
 import Vehicles from './pages/Vehicles';
 import VehicleDetails from './pages/VehicleDetails';
-import VehicleRegistration from './pages/VehicleRegistration';
 import Maintenance from './pages/Maintenance';
 import Drivers from './pages/Drivers';
+import DriverDetails from './pages/DriverDetails';
 import License from './pages/License';
 import Trips from './pages/Trips';
 import TripDetails from './pages/TripDetails';
 import Expenses from './pages/Expenses';
+import ExpenseDetails from './pages/ExpenseDetails';
 import Fuel from './pages/Fuel';
 import Analytics from './pages/Analytics';
 import Reports from './pages/Reports';
@@ -57,10 +58,6 @@ const router = createBrowserRouter([
             element: <Vehicles />,
           },
           {
-            path: 'vehicles/new',
-            element: <VehicleRegistration />,
-          },
-          {
             path: 'vehicles/:id',
             element: <VehicleDetails />,
           },
@@ -71,6 +68,10 @@ const router = createBrowserRouter([
           {
             path: 'drivers',
             element: <Drivers />,
+          },
+          {
+            path: 'drivers/:id',
+            element: <DriverDetails />,
           },
           {
             path: 'license',
@@ -87,6 +88,10 @@ const router = createBrowserRouter([
           {
             path: 'expenses',
             element: <Expenses />,
+          },
+          {
+            path: 'expenses/:id',
+            element: <ExpenseDetails />,
           },
           {
             path: 'fuel',

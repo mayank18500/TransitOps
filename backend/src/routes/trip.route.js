@@ -5,17 +5,19 @@ import { requireRole } from '../middleware/rbac.middleware.js';
 
 const router = Router();
 
-// Apply auth check and allow both Fleet Manager and Dispatcher
-router.use(verifyToken, requireRole(['Fleet Manager', 'Dispatcher']));
+// Apply auth check
+router.use(verifyToken);
 
 router.get('/', tripController.getAllTrips);
 router.get('/:id', tripController.getTripById);
-router.post('/', tripController.createTrip);
-router.put('/:id', tripController.updateTrip);
-router.delete('/:id', tripController.deleteTrip);
 
-router.post('/:id/dispatch', tripController.dispatchTrip);
-router.post('/:id/complete', tripController.completeTrip);
-router.post('/:id/cancel', tripController.cancelTrip);
+const dispatchRoles = requireRole(['Dispatcher', 'Fleet Manager']);
+router.post('/', dispatchRoles, tripController.createTrip);
+router.put('/:id', dispatchRoles, tripController.updateTrip);
+router.delete('/:id', dispatchRoles, tripController.deleteTrip);
+
+router.post('/:id/dispatch', dispatchRoles, tripController.dispatchTrip);
+router.post('/:id/complete', dispatchRoles, tripController.completeTrip);
+router.post('/:id/cancel', dispatchRoles, tripController.cancelTrip);
 
 export default router;

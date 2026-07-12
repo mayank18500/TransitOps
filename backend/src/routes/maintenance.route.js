@@ -6,9 +6,9 @@ import { requireRole } from '../middleware/rbac.middleware.js';
 const router = Router();
 
 // Apply auth middleware to all endpoints
-router.use(verifyToken, requireRole(['Fleet Manager']));
+router.use(verifyToken);
 
 router.get('/', maintenanceController.getAllMaintenance);
-router.post('/', maintenanceController.createMaintenance);
+router.post('/', requireRole(['Financial Analyst', 'Fleet Manager']), maintenanceController.createMaintenance);
 
 export default router;

@@ -13,8 +13,9 @@ export const Card = React.forwardRef(({
     <div
       ref={ref}
       className={cn(
-        'card !w-full !max-w-none before:!content-none after:!content-none',
-        !isHoverable && 'hover:!transform-none hover:!shadow-[0.7em_0.7em_0_var(--shadow-color)]',
+        'rounded-3xl bg-white/70 backdrop-blur-xl border border-white/50 shadow-sm transition-all duration-300',
+        isHoverable && 'hover:shadow-lg hover:-translate-y-1 hover:bg-white/90',
+        'p-6 lg:p-8',
         className
       )}
       {...props}

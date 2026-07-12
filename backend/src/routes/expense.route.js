@@ -5,12 +5,12 @@ import { requireRole } from '../middleware/rbac.middleware.js';
 
 const router = Router();
 
-router.use(verifyToken, requireRole(['Fleet Manager', 'Financial Analyst']));
+router.use(verifyToken);
 
 router.get('/', expenseController.getAllExpenses);
 router.get('/:id', expenseController.getExpenseById);
-router.post('/', expenseController.createExpense);
-router.put('/:id', expenseController.updateExpense);
-router.delete('/:id', expenseController.deleteExpense);
+router.post('/', requireRole(['Financial Analyst', 'Fleet Manager']), expenseController.createExpense);
+router.put('/:id', requireRole(['Financial Analyst', 'Fleet Manager']), expenseController.updateExpense);
+router.delete('/:id', requireRole(['Financial Analyst', 'Fleet Manager']), expenseController.deleteExpense);
 
 export default router;

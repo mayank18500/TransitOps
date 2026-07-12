@@ -6,7 +6,11 @@ export const getAllTrips = async () => {
 
 export const getTripById = async (id) => {
   return await prisma.trip.findUnique({
-    where: { id }
+    where: { id },
+    include: {
+      vehicle: true,
+      driver: true
+    }
   });
 };
 

@@ -6,12 +6,12 @@ import { requireRole } from '../middleware/rbac.middleware.js';
 const router = Router();
 
 // Apply auth middleware to all endpoints
-router.use(verifyToken, requireRole(['Fleet Manager']));
+router.use(verifyToken);
 
 router.get('/', vehicleController.getAllVehicles);
 router.get('/:id', vehicleController.getVehicleById);
-router.post('/', vehicleController.createVehicle);
-router.put('/:id', vehicleController.updateVehicle);
-router.delete('/:id', vehicleController.deleteVehicle);
+router.post('/', requireRole(['Fleet Manager']), vehicleController.createVehicle);
+router.put('/:id', requireRole(['Fleet Manager', 'Dispatcher', 'Financial Analyst']), vehicleController.updateVehicle); // Others need to update status
+router.delete('/:id', requireRole(['Fleet Manager']), vehicleController.deleteVehicle);
 
 export default router;
