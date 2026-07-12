@@ -1,34 +1,43 @@
 import React, { useState } from 'react';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useNavigate, useLocation, Link } from 'react-router-dom';
 import { toast } from 'react-hot-toast';
-import { Shield, KeyRound, Mail, UserCheck } from 'lucide-react';
+import { KeyRound, Mail, UserCheck } from 'lucide-react';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import * as z from 'zod';
+import { m, AnimatePresence } from 'framer-motion';
+
 import { useAuth, DEMO_USERS } from '../context/AuthContext';
 import { Input } from './ui/Input';
 import { Button } from './ui/Button';
 import { Card } from './ui/Cards';
 
+const loginSchema = z.object({
+  email: z.string().min(1, 'Email is required').email('Invalid email address'),
+  password: z.string().min(6, 'Password must be at least 6 characters'),
+});
+
 export default function Login() {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [isSubmitting, setIsSubmitting] = useState(false);
   const { login } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
+  const [isSubmittingQuick, setIsSubmittingQuick] = useState(false);
 
   // Redirect target after login
   const from = location.state?.from?.pathname || '/dashboard';
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    if (!email || !password) {
-      toast.error('Please enter email and password');
-      return;
-    }
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isSubmitting },
+    setValue
+  } = useForm({
+    resolver: zodResolver(loginSchema),
+    defaultValues: { email: '', password: '' }
+  });
 
-    setIsSubmitting(true);
-    const result = await login(email, password);
-    setIsSubmitting(false);
-
+  const onSubmit = async (data) => {
+    const result = await login(data.email, data.password);
     if (result.success) {
       toast.success('Successfully logged in!');
       navigate(from, { replace: true });
@@ -38,12 +47,9 @@ export default function Login() {
   };
 
   const handleQuickLogin = async (user) => {
-    setIsSubmitting(true);
-    setEmail(user.email);
-    setPassword(user.password);
-    
+    setIsSubmittingQuick(true);
     const result = await login(user.email, user.password);
-    setIsSubmitting(false);
+    setIsSubmittingQuick(false);
 
     if (result.success) {
       toast.success(`Logged in as ${user.name} (${user.role})`);
@@ -54,44 +60,69 @@ export default function Login() {
   };
 
   return (
-    <div className="space-y-6">
-      {/* Centered Login Card */}
-      <Card className="p-8 bg-bg-surface border border-border shadow-modal rounded-xl relative overflow-hidden">
-        {/* Abstract Glow Circle */}
-        <div className="absolute -top-24 -left-24 h-48 w-48 rounded-full bg-brand-primary/5 blur-2xl pointer-events-none" />
-        
-        {/* Brand Header */}
-        <div className="text-center space-y-2 mb-8 relative z-10">
-          <div className="inline-flex h-10 w-10 items-center justify-center rounded-l bg-brand-primary/10 border border-brand-primary/20 text-brand-primary mb-2">
-            <Shield className="h-5 w-5" />
-          </div>
-          <h2 className="text-h3 font-bold tracking-tight text-text-primary">Welcome to TransitOps</h2>
-          <p className="text-caption text-text-secondary">Enter credentials or select a demo role below</p>
+    <m.div 
+      initial={{ opacity: 0, x: 8 }}
+      animate={{ opacity: 1, x: 0 }}
+      exit={{ opacity: 0, x: -8 }}
+      transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
+      className="space-y-6"
+    >
+      {/* Login Card */}
+      <Card className="p-8 bg-bg-surface border border-border shadow-modal rounded-xl relative">
+        <div className="space-y-2 mb-8">
+          <h2 className="text-h3 font-bold tracking-tight text-text-primary">Welcome back</h2>
+          <p className="text-body text-text-secondary">Enter your credentials to manage your fleet</p>
         </div>
 
         {/* Input Form */}
-        <form onSubmit={handleSubmit} className="space-y-5 relative z-10">
-          <Input
-            type="email"
-            label="Email Address"
-            placeholder="e.g. manager@transitops.com"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            icon={<Mail className="h-4.5 w-4.5" />}
-            isDisabled={isSubmitting}
-            required
-          />
+        <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
+          <div className="space-y-1">
+            <Input
+              type="email"
+              label="Email Address"
+              placeholder="e.g. manager@transitops.com"
+              {...register('email')}
+              icon={<Mail className="h-4.5 w-4.5" />}
+              isDisabled={isSubmitting || isSubmittingQuick}
+              isError={!!errors.email}
+            />
+            <AnimatePresence>
+              {errors.email && (
+                <m.p 
+                  initial={{ opacity: 0, height: 0 }} 
+                  animate={{ opacity: 1, height: 'auto' }} 
+                  exit={{ opacity: 0, height: 0 }}
+                  className="text-tiny text-danger-fg mt-1"
+                >
+                  {errors.email.message}
+                </m.p>
+              )}
+            </AnimatePresence>
+          </div>
 
-          <Input
-            type="password"
-            label="Password"
-            placeholder="••••••••"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            icon={<KeyRound className="h-4.5 w-4.5" />}
-            isDisabled={isSubmitting}
-            required
-          />
+          <div className="space-y-1">
+            <Input
+              type="password"
+              label="Password"
+              placeholder="••••••••"
+              {...register('password')}
+              icon={<KeyRound className="h-4.5 w-4.5" />}
+              isDisabled={isSubmitting || isSubmittingQuick}
+              isError={!!errors.password}
+            />
+            <AnimatePresence>
+              {errors.password && (
+                <m.p 
+                  initial={{ opacity: 0, height: 0 }} 
+                  animate={{ opacity: 1, height: 'auto' }} 
+                  exit={{ opacity: 0, height: 0 }}
+                  className="text-tiny text-danger-fg mt-1"
+                >
+                  {errors.password.message}
+                </m.p>
+              )}
+            </AnimatePresence>
+          </div>
 
           <Button
             type="submit"
@@ -99,10 +130,18 @@ export default function Login() {
             size="lg"
             className="w-full mt-2 h-11"
             isLoading={isSubmitting}
+            isDisabled={isSubmittingQuick}
           >
             Sign In
           </Button>
         </form>
+
+        <div className="mt-6 text-center text-caption text-text-secondary">
+          Don't have an account?{' '}
+          <Link to="/signup" className="font-semibold text-brand-primary hover:underline transition-all">
+            Sign Up
+          </Link>
+        </div>
       </Card>
 
       {/* Judge Quick Login Box */}
@@ -129,6 +168,6 @@ export default function Login() {
           ))}
         </div>
       </Card>
-    </div>
+    </m.div>
   );
 }

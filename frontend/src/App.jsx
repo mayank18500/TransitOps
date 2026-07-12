@@ -3,6 +3,7 @@ import MainLayout from './layouts/MainLayout';
 import DashboardLayout from './layouts/DashboardLayout';
 import AuthLayout from './layouts/AuthLayout';
 import Login from './components/Login';
+import Signup from './components/Signup';
 import { ProtectedRoute } from './components/ProtectedRoute';
 
 // Mock Placeholder views to verify router structure
@@ -92,6 +93,10 @@ const router = createBrowserRouter([
           {
             path: 'login',
             element: <Login />,
+          },
+          {
+            path: 'signup',
+            element: <Signup />,
           },
         ],
       },

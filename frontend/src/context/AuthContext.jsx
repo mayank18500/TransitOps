@@ -90,6 +90,19 @@ export const AuthProvider = ({ children }) => {
           setIsAuthenticated(true);
           return { success: true };
         } else {
+          // Check if it's a recently registered mock user
+          const mockUsers = JSON.parse(localStorage.getItem('mockUsers') || '[]');
+          const customUser = mockUsers.find(
+            (u) => u.email.toLowerCase() === email.toLowerCase() && u.password === password
+          );
+          if (customUser) {
+            const fakeToken = 'mock_jwt_token_' + btoa(JSON.stringify(customUser));
+            localStorage.setItem('token', fakeToken);
+            localStorage.setItem('user', JSON.stringify(customUser));
+            setUser(customUser);
+            setIsAuthenticated(true);
+            return { success: true };
+          }
           throw new Error('Invalid email or password');
         }
       }
@@ -104,6 +117,49 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
+  const signup = async (name, email, password, role) => {
+    setIsLoading(true);
+    try {
+      if (import.meta.env.VITE_API_URL) {
+        const res = await api.post('/auth/signup', { name, email, password, role });
+        const { token, user: loggedUser } = res.data;
+        localStorage.setItem('token', token);
+        localStorage.setItem('user', JSON.stringify(loggedUser));
+        setUser(loggedUser);
+        setIsAuthenticated(true);
+        return { success: true };
+      } else {
+        // standalone client mock signup
+        const existingDemo = DEMO_USERS.find(u => u.email.toLowerCase() === email.toLowerCase());
+        const mockUsers = JSON.parse(localStorage.getItem('mockUsers') || '[]');
+        const existingMock = mockUsers.find(u => u.email.toLowerCase() === email.toLowerCase());
+        
+        if (existingDemo || existingMock) {
+          throw new Error('Email is already registered');
+        }
+        
+        const newUser = { name, email, password, role };
+        mockUsers.push(newUser);
+        localStorage.setItem('mockUsers', JSON.stringify(mockUsers));
+        
+        const fakeToken = 'mock_jwt_token_' + btoa(JSON.stringify(newUser));
+        localStorage.setItem('token', fakeToken);
+        localStorage.setItem('user', JSON.stringify(newUser));
+        setUser(newUser);
+        setIsAuthenticated(true);
+        return { success: true };
+      }
+    } catch (error) {
+      setIsLoading(false);
+      return {
+        success: false,
+        error: error.response?.data?.message || error.message || 'Signup failed',
+      };
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   const logout = () => {
     localStorage.removeItem('token');
     localStorage.removeItem('user');
@@ -112,7 +168,7 @@ export const AuthProvider = ({ children }) => {
   };
 
   return (
-    <AuthContext.Provider value={{ user, isAuthenticated, isLoading, login, logout }}>
+    <AuthContext.Provider value={{ user, isAuthenticated, isLoading, login, signup, logout }}>
       {children}
     </AuthContext.Provider>
   );
