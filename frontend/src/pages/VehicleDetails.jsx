@@ -10,11 +10,13 @@ import { Modal } from '../components/ui/Modal';
 import { Input } from '../components/ui/Input';
 import { Select } from '../components/ui/Select';
 import axios from '../lib/axios';
+import { useAuth } from '../context/AuthContext';
 
 export default function VehicleDetails() {
+  const { user } = useAuth();
   const { id } = useParams();
   const [vehicle, setVehicle] = useState(null);
-  const [drivers, setDrivers] = useState([]);
+  const [draftTrips, setDraftTrips] = useState([]);
   const [loading, setLoading] = useState(true);
   const [activeModal, setActiveModal] = useState(null);
 
@@ -30,18 +32,18 @@ export default function VehicleDetails() {
     }
   };
 
-  const fetchDrivers = async () => {
+  const fetchDraftTrips = async () => {
     try {
-      const res = await axios.get('/api/drivers');
-      setDrivers(res.data.filter(d => d.status === 'Available'));
+      const res = await axios.get('/api/trips');
+      setDraftTrips(res.data.filter(t => t.vehicleId === id && t.status === 'Draft'));
     } catch (error) {
-      console.error('Error fetching drivers:', error);
+      console.error('Error fetching trips:', error);
     }
   };
 
   useEffect(() => {
     fetchVehicle();
-    fetchDrivers();
+    fetchDraftTrips();
   }, [id]);
 
   if (loading) {
@@ -74,19 +76,20 @@ export default function VehicleDetails() {
           status: data.status
         });
       } else if (actionType === 'dispatch') {
-        await axios.post('/api/trips', {
-          vehicleId: id,
-          driverId: data.driverId,
-          destination: data.destination,
-          source: data.source || 'Current Location',
-          cargoWeight: parseFloat(data.cargoWeight)
-        });
+        if (!data.tripId) {
+          alert('Please select a trip to dispatch.');
+          return;
+        }
+        await axios.post(`/api/trips/${data.tripId}/dispatch`);
       } else if (actionType === 'maintenance') {
         await axios.post('/api/maintenance', {
           vehicleId: id,
           description: `${data.type} - ${data.description}`,
           cost: parseFloat(data.cost),
           date: data.date
+        });
+        await axios.put(`/api/vehicles/${id}`, {
+          status: 'In Shop'
         });
       } else if (actionType === 'fuel') {
         await axios.post('/api/fuel', {
@@ -116,7 +119,9 @@ export default function VehicleDetails() {
 
       <PageHeader title={`${vehicle.model} (${vehicle.registrationNumber})`} subtitle="Detailed vehicle specifications, maintenance history, and logs.">
         <StatusChip status={vehicle.status} />
-        <Button variant="outline" icon={<PenTool size={18} />} onClick={() => setActiveModal('edit')}>Edit</Button>
+        {user?.role === 'Fleet Manager' && (
+          <Button variant="outline" icon={<PenTool size={18} />} onClick={() => setActiveModal('edit')}>Edit</Button>
+        )}
       </PageHeader>
       
       <Section>
@@ -150,9 +155,18 @@ export default function VehicleDetails() {
           <div className="space-y-6">
             <Card className="flex flex-col gap-4">
               <h4 className="text-body-lg font-bold tracking-tight border-b-4 border-border pb-2">Quick Actions</h4>
-              <Button variant="primary" className="w-full" icon={<ShieldAlert size={18} />} onClick={() => setActiveModal('dispatch')} disabled={vehicle.status !== 'Available'}>Dispatch to Trip</Button>
-              <Button variant="secondary" className="w-full" icon={<PenTool size={18} />} onClick={() => setActiveModal('maintenance')}>Log Maintenance</Button>
-              <Button variant="outline" className="w-full" icon={<Flame size={18} />} onClick={() => setActiveModal('fuel')}>Add Fuel Log</Button>
+              {user?.role === 'Dispatcher' && (
+                <Button variant="primary" className="w-full" icon={<ShieldAlert size={18} />} onClick={() => setActiveModal('dispatch')} disabled={vehicle.status !== 'Available'}>Dispatch to Trip</Button>
+              )}
+              {user?.role === 'Financial Analyst' && (
+                <>
+                  <Button variant="secondary" className="w-full" icon={<PenTool size={18} />} onClick={() => setActiveModal('maintenance')}>Log Maintenance</Button>
+                  <Button variant="outline" className="w-full" icon={<Flame size={18} />} onClick={() => setActiveModal('fuel')}>Add Fuel Log</Button>
+                </>
+              )}
+              {(!user || (!['Dispatcher', 'Financial Analyst'].includes(user.role))) && (
+                <p className="text-text-muted text-sm italic">You don't have permission to perform actions.</p>
+              )}
             </Card>
 
             <Card className="flex flex-col gap-4">
@@ -181,16 +195,24 @@ export default function VehicleDetails() {
         </form>
       </Modal>
 
-      <Modal isOpen={activeModal === 'dispatch'} onClose={() => setActiveModal(null)} title="Dispatch Vehicle">
+      <Modal isOpen={activeModal === 'dispatch'} onClose={() => setActiveModal(null)} title="Dispatch to Pre-defined Trip">
         <form onSubmit={(e) => handleAction(e, 'dispatch')} className="space-y-4">
-          <Input label="Selected Vehicle" defaultValue={vehicle.registrationNumber} disabled />
-          <Select label="Assign Driver" name="driverId" options={drivers.map(d => ({ value: d.id, label: d.name }))} required />
-          <Input label="Source" name="source" placeholder="Starting location..." required />
-          <Input label="Destination" name="destination" placeholder="Enter destination address..." required />
-          <Input label="Cargo Weight (kg)" name="cargoWeight" type="number" placeholder="Enter weight..." required />
+          {draftTrips.length === 0 ? (
+            <p className="text-text-muted text-sm pb-4">No draft trips are assigned to this vehicle. Please go to Trips and create one first.</p>
+          ) : (
+            <>
+              <Select 
+                label="Select Pre-defined Draft Trip" 
+                name="tripId" 
+                options={draftTrips.map(t => ({ value: t.id, label: `${t.source} to ${t.destination} (Driver: ${t.driver?.name || 'Assigned'})` }))} 
+                required 
+              />
+              <p className="text-text-muted text-sm mt-2">Dispatching this trip will automatically update the vehicle and driver status to 'On Trip'.</p>
+            </>
+          )}
           <div className="flex justify-end gap-3 mt-6">
             <Button type="button" variant="ghost" onClick={() => setActiveModal(null)}>Cancel</Button>
-            <Button type="submit" variant="primary">Create Trip</Button>
+            <Button type="submit" variant="primary" disabled={draftTrips.length === 0}>Dispatch Trip</Button>
           </div>
         </form>
       </Modal>

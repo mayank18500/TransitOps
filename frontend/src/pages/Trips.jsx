@@ -10,8 +10,10 @@ import { Input } from '../components/ui/Input';
 import { Select } from '../components/ui/Select';
 import api from '../lib/axios';
 import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext';
 
 export default function Trips() {
+  const { user } = useAuth();
   const [search, setSearch] = useState('');
   const [trips, setTrips] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -114,9 +116,11 @@ export default function Trips() {
   return (
     <div className="space-y-8 animate-fade-in">
       <PageHeader title="Trips Management" subtitle="Dispatch vehicles, assign drivers, and monitor active trips in real-time.">
-        <Button variant="primary" icon={<Plus size={18} />} onClick={handleOpenModal}>
-          Create Trip
-        </Button>
+        {['Fleet Manager', 'Dispatcher'].includes(user?.role) && (
+          <Button variant="primary" icon={<Plus size={18} />} onClick={handleOpenModal}>
+            Create Trip
+          </Button>
+        )}
       </PageHeader>
       
       <Section>

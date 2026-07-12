@@ -9,8 +9,10 @@ import { Modal } from '../components/ui/Modal';
 import { Input } from '../components/ui/Input';
 import { Select } from '../components/ui/Select';
 import axios from '../lib/axios';
+import { useAuth } from '../context/AuthContext';
 
 export default function DriverDetails() {
+  const { user } = useAuth();
   const { id } = useParams();
   const [driver, setDriver] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -62,6 +64,10 @@ export default function DriverDetails() {
           licenseExpiry: data.licenseExpiry,
           status: data.status
         });
+      } else if (actionType === 'leave') {
+        await axios.put(`/api/drivers/${id}`, {
+          status: 'Off Duty'
+        });
       } else {
         // Other actions might not have endpoints yet, just close modal
         console.log(`Action ${actionType} performed with data:`, data);
@@ -84,7 +90,9 @@ export default function DriverDetails() {
 
       <PageHeader title={`${driver.name} (Driver)`} subtitle={`Detailed driver profile and performance history (ID: ${driver.id})`}>
         <StatusChip status={driver.status} />
-        <Button variant="outline" icon={<PenTool size={18} />} onClick={() => setActiveModal('edit')}>Edit</Button>
+        {user?.role === 'Fleet Manager' && (
+          <Button variant="outline" icon={<PenTool size={18} />} onClick={() => setActiveModal('edit')}>Edit</Button>
+        )}
       </PageHeader>
       
       <Section>
@@ -128,8 +136,15 @@ export default function DriverDetails() {
           <div className="space-y-6">
             <Card className="flex flex-col gap-4">
               <h4 className="text-body-lg font-bold tracking-tight border-b-4 border-border pb-2">Quick Actions</h4>
-              <Button variant="primary" className="w-full" icon={<Calendar size={18} />} onClick={() => setActiveModal('leave')}>Schedule Leave</Button>
-              <Button variant="secondary" className="w-full" icon={<Award size={18} />} onClick={() => setActiveModal('training')}>Record Training</Button>
+              {['Fleet Manager', 'Dispatcher'].includes(user?.role) && (
+                <Button variant="primary" className="w-full" icon={<Calendar size={18} />} onClick={() => setActiveModal('leave')}>Schedule Leave</Button>
+              )}
+              {['Fleet Manager', 'Safety Officer'].includes(user?.role) && (
+                <Button variant="secondary" className="w-full" icon={<Award size={18} />} onClick={() => setActiveModal('training')}>Record Training</Button>
+              )}
+              {(!user || (!['Fleet Manager', 'Dispatcher', 'Safety Officer'].includes(user.role))) && (
+                <p className="text-text-muted text-sm italic">You don't have permission to perform actions.</p>
+              )}
             </Card>
           </div>
         </Grid>

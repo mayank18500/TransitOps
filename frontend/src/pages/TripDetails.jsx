@@ -9,8 +9,10 @@ import { Modal } from '../components/ui/Modal';
 import { Input } from '../components/ui/Input';
 import { Select } from '../components/ui/Select';
 import axios from '../lib/axios';
+import { useAuth } from '../context/AuthContext';
 
 export default function TripDetails() {
+  const { user } = useAuth();
   const { id } = useParams();
   const [trip, setTrip] = useState(null);
   const [vehicles, setVehicles] = useState([]);
@@ -77,7 +79,7 @@ export default function TripDetails() {
           cargoWeight: parseFloat(data.cargoWeight)
         });
       } else if (actionType === 'complete') {
-        await axios.put(`/api/trips/${id}/complete`);
+        await axios.post(`/api/trips/${id}/complete`);
         // If odometer was provided, update the vehicle
         if (data.odometer && trip.vehicleId) {
           await axios.put(`/api/vehicles/${trip.vehicleId}`, { odometer: parseFloat(data.odometer) });
@@ -88,7 +90,7 @@ export default function TripDetails() {
           driverId: data.driverId
         });
       } else if (actionType === 'cancel') {
-        await axios.put(`/api/trips/${id}/cancel`);
+        await axios.post(`/api/trips/${id}/cancel`);
       } else {
         console.log(`Action ${actionType} performed with data:`, data);
       }
@@ -101,6 +103,8 @@ export default function TripDetails() {
     }
   };
 
+  const hasTripManagementRole = ['Dispatcher', 'Fleet Manager'].includes(user?.role);
+
   return (
     <div className="space-y-8 animate-fade-in">
       <div className="flex items-center gap-2 text-text-muted mb-4">
@@ -111,7 +115,17 @@ export default function TripDetails() {
 
       <PageHeader title={`Trip Details (${trip.id.substring(0,8).toUpperCase()})`} subtitle="Active shipment tracking and dispatch management.">
         <StatusChip status={trip.status} />
-        {trip.status === 'Dispatched' && (
+        {hasTripManagementRole && trip.status === 'Draft' && (
+          <Button variant="primary" icon={<CheckCircle2 size={18} />} onClick={async () => {
+            try {
+              await axios.post(`/api/trips/${id}/dispatch`);
+              fetchTrip();
+            } catch (error) {
+              alert(`Failed to dispatch trip: ${error.response?.data?.message || error.message}`);
+            }
+          }}>Dispatch Trip</Button>
+        )}
+        {hasTripManagementRole && trip.status === 'Dispatched' && (
           <Button variant="outline" icon={<CheckCircle2 size={18} />} onClick={() => setActiveModal('complete')}>Mark Completed</Button>
         )}
       </PageHeader>
@@ -124,7 +138,9 @@ export default function TripDetails() {
             <Card className="flex flex-col gap-4">
               <div className="flex justify-between items-center border-b-4 border-border pb-2">
                 <h4 className="text-body-lg font-bold tracking-tight">Route Progress</h4>
-                <Button variant="ghost" size="sm" icon={<PenTool size={16} />} onClick={() => setActiveModal('edit')} disabled={trip.status === 'Completed' || trip.status === 'Cancelled'}>Edit Route</Button>
+                {hasTripManagementRole && (
+                  <Button variant="ghost" size="sm" icon={<PenTool size={16} />} onClick={() => setActiveModal('edit')} disabled={trip.status === 'Completed' || trip.status === 'Cancelled'}>Edit Route</Button>
+                )}
               </div>
               <div className="text-caption space-y-1 mt-2">
                 <div className="flex justify-between text-text-muted">
@@ -140,7 +156,9 @@ export default function TripDetails() {
             <Card className="flex flex-col gap-4">
               <div className="flex justify-between items-center border-b-4 border-border pb-2">
                 <h4 className="text-body-lg font-bold tracking-tight">Assigned Personnel & Equipment</h4>
-                <Button variant="ghost" size="sm" icon={<Users size={16} />} onClick={() => setActiveModal('assign')} disabled={trip.status !== 'Draft'}>Reassign</Button>
+                {hasTripManagementRole && (
+                  <Button variant="ghost" size="sm" icon={<Users size={16} />} onClick={() => setActiveModal('assign')} disabled={trip.status !== 'Draft'}>Reassign</Button>
+                )}
               </div>
               <div className="space-y-4">
                 <div>
@@ -160,7 +178,7 @@ export default function TripDetails() {
               </div>
             </Card>
 
-            {(trip.status === 'Draft' || trip.status === 'Dispatched') && (
+            {(trip.status === 'Draft' || trip.status === 'Dispatched') && hasTripManagementRole && (
               <Card className="flex flex-col gap-4 border-danger/40 bg-danger/5">
                 <h4 className="text-body-lg font-bold tracking-tight text-danger-fg border-b border-danger/20 pb-2 flex items-center gap-2">
                   <ShieldAlert size={18} /> Emergency Actions

@@ -10,8 +10,10 @@ import { Input } from '../components/ui/Input';
 import { Select } from '../components/ui/Select';
 import api from '../lib/axios';
 import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext';
 
 export default function Drivers() {
+  const { user } = useAuth();
   const [search, setSearch] = useState('');
   const [drivers, setDrivers] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -89,9 +91,11 @@ export default function Drivers() {
   return (
     <div className="space-y-8 animate-fade-in">
       <PageHeader title="Drivers Directory" subtitle="Manage driver records, track safety scores, and monitor compliance.">
-        <Button variant="primary" icon={<Plus size={18} />} onClick={() => setIsModalOpen(true)}>
-          Add Driver
-        </Button>
+        {user?.role === 'Fleet Manager' && (
+          <Button variant="primary" icon={<Plus size={18} />} onClick={() => setIsModalOpen(true)}>
+            Add Driver
+          </Button>
+        )}
       </PageHeader>
       
       <Section>

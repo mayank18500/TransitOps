@@ -10,8 +10,10 @@ import { Input } from '../components/ui/Input';
 import { Select } from '../components/ui/Select';
 import api from '../lib/axios';
 import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext';
 
 export default function Vehicles() {
+  const { user } = useAuth();
   const [search, setSearch] = useState('');
   const [vehicles, setVehicles] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -93,9 +95,11 @@ export default function Vehicles() {
   return (
     <div className="space-y-8 animate-fade-in">
       <PageHeader title="Vehicles Directory" subtitle="Manage your fleet, track status, and schedule maintenance.">
-        <Button variant="primary" icon={<Plus size={18} />} onClick={() => setIsModalOpen(true)}>
-          Register Vehicle
-        </Button>
+        {user?.role === 'Fleet Manager' && (
+          <Button variant="primary" icon={<Plus size={18} />} onClick={() => setIsModalOpen(true)}>
+            Register Vehicle
+          </Button>
+        )}
       </PageHeader>
       
       <Section>
