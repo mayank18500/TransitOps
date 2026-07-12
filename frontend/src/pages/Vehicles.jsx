@@ -5,9 +5,11 @@ import { Button } from '../components/ui/Button';
 import { DataTable } from '../components/ui/DataTable';
 import { StatusChip } from '../components/ui/Feedback';
 import { Plus } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 import { vehicleService } from '../services/vehicle.service';
 
 export default function Vehicles() {
+  const navigate = useNavigate();
   const [search, setSearch] = useState('');
   const [vehicles, setVehicles] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -46,7 +48,7 @@ export default function Vehicles() {
   return (
     <div className="space-y-8 animate-fade-in">
       <PageHeader title="Vehicles Directory" subtitle="Manage your fleet, track status, and schedule maintenance.">
-        <Button variant="primary" icon={<Plus size={18} />}>
+        <Button variant="primary" icon={<Plus size={18} />} onClick={() => navigate('/vehicles/new')}>
           Register Vehicle
         </Button>
       </PageHeader>
