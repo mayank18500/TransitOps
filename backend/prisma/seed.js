@@ -29,7 +29,7 @@ async function main() {
     const role = await prisma.role.findUnique({ where: { name: u.roleName } });
     await prisma.user.upsert({
       where: { email: u.email },
-      update: {},
+      update: { password: password },
       create: {
         email: u.email,
         password: password,
