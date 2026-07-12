@@ -1,0 +1,489 @@
+.brutalist-wrapper {
+  /* Center the card on the page */
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #f4f4f5;
+  background-image: radial-gradient(#d4d4d8 1px, transparent 1px);
+  background-size: 20px 20px;
+  padding: 2em;
+
+  .login-container {
+    perspective: 1000px;
+  }
+
+  .card {
+    /* Emerald, White, and Black Theme */
+    --primary: #10b981; /* Emerald 500 */
+    --primary-hover: #059669; /* Emerald 600 */
+    --secondary: #000000; /* Black */
+    --secondary-hover: #27272a; /* Dark Zinc */
+    --accent: #6ee7b7; /* Emerald 300 */
+    --text: #000000;
+    --bg: #ffffff;
+    --shadow-color: #000000;
+    --pattern-color: #a1a1aa;
+
+    position: relative;
+    width: 52em; /* Wider for side-by-side layout */
+    max-width: 95vw;
+    background: var(--bg);
+    border: 0.35em solid var(--text);
+    border-radius: 0.6em;
+    box-shadow:
+      0.7em 0.7em 0 var(--shadow-color),
+      inset 0 0 0 0.15em rgba(0, 0, 0, 0.05);
+    transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+    overflow: hidden;
+    font-family: ui-sans-serif, system-ui, -apple-system, sans-serif;
+    transform-origin: center;
+  }
+
+  .card:hover {
+    transform: translate(-0.4em, -0.4em) scale(1.01);
+    box-shadow: 1.1em 1.1em 0 var(--shadow-color);
+  }
+
+  .card:hover .card-pattern-grid,
+  .card:hover .card-overlay-dots {
+    opacity: 1;
+  }
+
+  .card::before {
+    content: "";
+    position: absolute;
+    top: -1em;
+    right: -1em;
+    width: 4em;
+    height: 4em;
+    background: var(--accent);
+    transform: rotate(45deg);
+    z-index: 1;
+  }
+
+  .card::after {
+    content: "★";
+    position: absolute;
+    top: 0.4em;
+    right: 0.4em;
+    color: var(--text);
+    font-size: 1.2em;
+    font-weight: bold;
+    z-index: 2;
+  }
+
+  .card-pattern-grid {
+    position: absolute;
+    inset: 0;
+    background-image: linear-gradient(
+        to right,
+        rgba(0, 0, 0, 0.05) 1px,
+        transparent 1px
+      ),
+      linear-gradient(to bottom, rgba(0, 0, 0, 0.05) 1px, transparent 1px);
+    background-size: 0.5em 0.5em;
+    pointer-events: none;
+    opacity: 0.5;
+    transition: opacity 0.4s ease;
+    z-index: 1;
+  }
+
+  .card-overlay-dots {
+    position: absolute;
+    inset: 0;
+    background-image: radial-gradient(var(--pattern-color) 1px, transparent 1px);
+    background-size: 1em 1em;
+    background-position: -0.5em -0.5em;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.4s ease;
+    z-index: 1;
+  }
+
+  .bold-pattern {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 6em;
+    height: 6em;
+    opacity: 0.15;
+    pointer-events: none;
+    z-index: 1;
+  }
+
+  .card-title-area {
+    position: relative;
+    padding: 1.4em;
+    background: var(--primary);
+    color: var(--text); /* Black text on Emerald */
+    font-weight: 900;
+    font-size: 1.4em;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 0.35em solid var(--text);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    z-index: 2;
+    overflow: hidden;
+  }
+
+  .card-title-area::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: repeating-linear-gradient(
+      45deg,
+      rgba(0, 0, 0, 0.1),
+      rgba(0, 0, 0, 0.1) 0.5em,
+      transparent 0.5em,
+      transparent 1em
+    );
+    pointer-events: none;
+    opacity: 0.3;
+  }
+
+  .card-tag {
+    background: var(--bg);
+    color: var(--text);
+    font-size: 0.55em;
+    font-weight: 800;
+    padding: 0.4em 0.8em;
+    border: 0.15em solid var(--text);
+    border-radius: 0.3em;
+    box-shadow: 0.2em 0.2em 0 var(--shadow-color);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    transform: rotate(3deg);
+    transition: all 0.3s ease;
+  }
+
+  .card:hover .card-tag {
+    transform: rotate(-2deg) scale(1.1);
+    box-shadow: 0.25em 0.25em 0 var(--shadow-color);
+  }
+
+  .card-body {
+    position: relative;
+    padding: 1.8em;
+    z-index: 2;
+  }
+  
+  .card-content-split {
+    display: flex;
+    flex-direction: row;
+    gap: 3em;
+  }
+  
+  .left-panel, .right-panel {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  @media (max-width: 768px) {
+    .card-content-split {
+      flex-direction: column;
+      gap: 1.5em;
+    }
+  }
+
+  .card-description {
+    margin-bottom: 1.5em;
+    color: var(--text);
+    font-size: 0.95em;
+    line-height: 1.5;
+    font-weight: 600;
+  }
+
+  /* Form Elements */
+  .form-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 1.2em;
+    margin-bottom: 2em;
+  }
+
+  .input-group {
+    position: relative;
+    display: flex;
+    align-items: center;
+  }
+
+  .input-icon {
+    position: absolute;
+    left: 1em;
+    color: var(--text);
+    z-index: 2;
+  }
+
+  .brutalist-input {
+    width: 100%;
+    padding: 0.9em 1em 0.9em 2.8em;
+    background: var(--bg);
+    border: 0.25em solid var(--text);
+    border-radius: 0.4em;
+    font-size: 0.95em;
+    font-weight: 700;
+    color: var(--text);
+    box-shadow: 0.3em 0.3em 0 var(--shadow-color);
+    transition: all 0.2s ease;
+    outline: none;
+  }
+
+  .brutalist-input::placeholder {
+    color: #71717a;
+    font-weight: 600;
+  }
+
+  .brutalist-input:focus {
+    transform: translate(-0.1em, -0.1em);
+    box-shadow: 0.4em 0.4em 0 var(--primary);
+  }
+
+  .w-full {
+    width: 100%;
+    margin-top: 0.5em;
+  }
+
+  /* Button Styling */
+  .card-button {
+    position: relative;
+    background: var(--secondary);
+    color: var(--bg);
+    font-size: 1em;
+    font-weight: 800;
+    padding: 1em 1.2em;
+    border: 0.25em solid var(--text);
+    border-radius: 0.4em;
+    box-shadow: 0.3em 0.3em 0 var(--shadow-color);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    overflow: hidden;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .card-button::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+      90deg,
+      transparent 0%,
+      rgba(255, 255, 255, 0.2) 50%,
+      transparent 100%
+    );
+    transition: left 0.6s ease;
+  }
+
+  .card-button:hover:not(:disabled) {
+    background: var(--secondary-hover);
+    transform: translate(-0.1em, -0.1em);
+    box-shadow: 0.4em 0.4em 0 var(--shadow-color);
+  }
+
+  .card-button:hover::before {
+    left: 100%;
+  }
+
+  .card-button:active:not(:disabled) {
+    transform: translate(0.1em, 0.1em);
+    box-shadow: 0.15em 0.15em 0 var(--shadow-color);
+  }
+
+  .card-button:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+  }
+
+  /* Divider / Action Area */
+  .card-actions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5em;
+    position: relative;
+  }
+
+  .price {
+    position: relative;
+    font-size: 1.6em;
+    font-weight: 900;
+    color: var(--text);
+    background: var(--bg);
+    text-transform: uppercase;
+  }
+
+  .price::before {
+    content: "";
+    position: absolute;
+    bottom: 0.15em;
+    left: 0;
+    width: 100%;
+    height: 0.3em;
+    background: var(--accent);
+    z-index: -1;
+    opacity: 0.8;
+  }
+
+  .price-currency {
+    font-size: 0.6em;
+    font-weight: 800;
+    vertical-align: top;
+    margin-right: 0.1em;
+    color: var(--primary);
+  }
+
+  .price-period {
+    display: block;
+    font-size: 0.45em;
+    font-weight: 700;
+    color: #52525b;
+    margin-top: 0.2em;
+    letter-spacing: 0.05em;
+  }
+
+  /* Demo Users Grid */
+  .feature-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 1em;
+  }
+
+  .feature-item {
+    display: flex;
+    align-items: center;
+    gap: 0.8em;
+    background: var(--bg);
+    border: 0.2em solid var(--text);
+    border-radius: 0.4em;
+    padding: 0.8em;
+    cursor: pointer;
+    text-align: left;
+    transition: all 0.2s ease;
+    box-shadow: 0.2em 0.2em 0 var(--text);
+  }
+
+  .feature-item:hover:not(:disabled) {
+    transform: translate(-0.1em, -0.1em);
+    box-shadow: 0.3em 0.3em 0 var(--primary);
+  }
+  
+  .feature-item:active:not(:disabled) {
+    transform: translate(0.1em, 0.1em);
+    box-shadow: 0.1em 0.1em 0 var(--shadow-color);
+  }
+
+  .feature-icon {
+    width: 2em;
+    height: 2em;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--primary);
+    border: 0.15em solid var(--text);
+    border-radius: 0.3em;
+    box-shadow: 0.2em 0.2em 0 var(--text);
+    transition: all 0.2s ease;
+    color: var(--text);
+  }
+
+  .feature-item:hover .feature-icon {
+    background: var(--accent);
+    transform: rotate(-10deg);
+  }
+
+  .feature-text-wrapper {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .feature-text {
+    font-size: 0.9em;
+    font-weight: 800;
+    color: var(--text);
+    text-transform: uppercase;
+  }
+
+  .feature-subtext {
+    font-size: 0.7em;
+    font-weight: 600;
+    color: #52525b;
+  }
+
+  /* Decorations */
+  .dots-pattern {
+    position: absolute;
+    bottom: 2em;
+    left: -2em;
+    width: 8em;
+    height: 4em;
+    opacity: 0.4;
+    transform: rotate(-10deg);
+    pointer-events: none;
+    z-index: 1;
+  }
+
+  .accent-shape {
+    position: absolute;
+    width: 2.5em;
+    height: 2.5em;
+    background: var(--primary);
+    border: 0.2em solid var(--text);
+    border-radius: 0.3em;
+    transform: rotate(45deg);
+    bottom: -1.2em;
+    right: 2em;
+    z-index: 0;
+    transition: transform 0.3s ease;
+  }
+
+  .card:hover .accent-shape {
+    transform: rotate(55deg) scale(1.1);
+  }
+
+  .stamp {
+    position: absolute;
+    bottom: 1.5em;
+    left: 1.5em;
+    width: 4.5em;
+    height: 4.5em;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 0.2em solid var(--text);
+    border-radius: 50%;
+    transform: rotate(-15deg);
+    opacity: 0.15;
+    z-index: 1;
+  }
+
+  .stamp-text {
+    font-size: 0.7em;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--text);
+  }
+
+  .corner-slice {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 2em;
+    height: 2em;
+    background: var(--bg);
+    border-right: 0.35em solid var(--text);
+    border-top: 0.35em solid var(--text);
+    border-radius: 0 0.6em 0 0;
+    z-index: 1;
+  }
+}
