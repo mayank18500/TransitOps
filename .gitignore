@@ -1,0 +1,22 @@
+# Dependency directories
+node_modules/
+
+# Production build directories
+dist/
+build/
+out/
+
+# Coverage directory
+coverage/
+
+# Environment files
+.env
+.env.*
+!.env.example
+
+# IDE configurations
+.vscode/
+.idea/
+
+# Log files
+*.log
