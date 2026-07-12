@@ -487,3 +487,8 @@
     z-index: 1;
   }
 }
+
+.card-button.secondary:hover:not(:disabled) {
+  background: var(--bg) !important;
+  color: var(--primary) !important;
+}

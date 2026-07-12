@@ -110,13 +110,24 @@ export default function Login() {
                       required
                     />
                   </div>
-                  <button
-                    type="submit"
-                    className="card-button w-full"
-                    disabled={isSubmitting}
-                  >
-                    {isSubmitting ? 'Authenticating...' : 'Sign In'}
-                  </button>
+                  <div className="flex flex-col gap-3 mt-2">
+                    <button
+                      type="submit"
+                      className="card-button w-full"
+                      disabled={isSubmitting}
+                    >
+                      {isSubmitting ? 'Authenticating...' : 'Sign In'}
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => navigate('/signup')}
+                      className="card-button secondary w-full"
+                      disabled={isSubmitting}
+                      style={{ background: 'var(--bg)', color: 'var(--text)' }}
+                    >
+                      Sign Up
+                    </button>
+                  </div>
                 </form>
               </div>
 
