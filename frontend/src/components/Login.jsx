@@ -8,9 +8,6 @@ import * as z from 'zod';
 import { m, AnimatePresence } from 'framer-motion';
 
 import { useAuth, DEMO_USERS } from '../context/AuthContext';
-import { Input } from './ui/Input';
-import { Button } from './ui/Button';
-import { Card } from './ui/Cards';
 
 const loginSchema = z.object({
   email: z.string().min(1, 'Email is required').email('Invalid email address'),
@@ -23,7 +20,6 @@ export default function Login() {
   const location = useLocation();
   const [isSubmittingQuick, setIsSubmittingQuick] = useState(false);
 
-  // Redirect target after login
   const from = location.state?.from?.pathname || '/dashboard';
 
   const {
@@ -57,6 +53,13 @@ export default function Login() {
     } else {
       toast.error(result.error);
     }
+  };
+
+  const getRoleIcon = (role) => {
+    const roleLower = role.toLowerCase();
+    if (roleLower.includes('manager')) return <Briefcase size={16} />;
+    if (roleLower.includes('dispatcher')) return <Radio size={16} />;
+    return <Zap size={16} />;
   };
 
   return (
