@@ -71,20 +71,33 @@
 }
 
 @layer utilities {
-  .modern-mesh-bg {
-    background-color: #f8fafc;
-    background-image: 
-      radial-gradient(at 0% 0%, hsla(158, 82%, 93%, 1) 0px, transparent 50%),
-      radial-gradient(at 100% 0%, hsla(158, 82%, 93%, 1) 0px, transparent 50%),
-      radial-gradient(at 100% 100%, hsla(210, 40%, 96%, 1) 0px, transparent 50%),
-      radial-gradient(at 0% 100%, hsla(210, 40%, 96%, 1) 0px, transparent 50%);
-  }
-  
-  .glass-panel {
-    background: var(--glass-bg);
-    backdrop-filter: blur(16px);
-    -webkit-backdrop-filter: blur(16px);
-    border: 1px solid var(--glass-border);
-    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.05);
+  .dashboard-theme {
+    --bg-base: 255 255 255; 
+    --bg-surface: 255 255 255;
+    --bg-surface-elevated: 249 250 251; /* light gray for sidebar */
+    --bg-surface-floating: 255 255 255;
+    
+    --bg-hover-rgb: 0 0 0 / 0.05;
+    --bg-active-rgb: 0 0 0 / 0.1;
+    
+    --text-primary: 17 24 39;
+    --text-secondary: 75 85 99;
+    --text-muted: 156 163 175;
+    
+    --primary: 37 99 235; /* Blue 600 */
+    --primary-hover: 29 78 216; /* Blue 700 */
+    --primary-active: 30 64 175; /* Blue 800 */
+    --primary-fg: 255 255 255;
+
+    --border-default: rgba(0, 0, 0, 0.06);
+    --border-muted: rgba(0, 0, 0, 0.03);
+    --border-focus: rgba(37, 99, 235, 0.5);
+    --border-primary: rgba(37, 99, 235, 1);
+    
+    --shadow-s: 0 1px 2px rgba(0, 0, 0, 0.05);
+    --shadow-m: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -2px rgba(0, 0, 0, 0.05);
+    --shadow-l: 0 10px 15px -3px rgba(0, 0, 0, 0.05), 0 4px 6px -4px rgba(0, 0, 0, 0.05);
+    --shadow-floating: 0 20px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.05);
+    --border-width-default: 1px;
   }
 }

@@ -101,7 +101,7 @@ export default function DriverDetails() {
             <InfoCard title="Driver Information" items={driverInfo} />
             
             <Card className="flex flex-col gap-4">
-              <h4 className="text-body-lg font-bold tracking-tight border-b-4 border-border pb-2">Safety & Performance</h4>
+              <h4 className="text-body-lg font-bold tracking-tight border- border-border pb-2">Safety & Performance</h4>
               <div className="text-caption space-y-1 mt-2">
                 <div className="flex justify-between text-text-muted">
                   <span>Safety Score</span>
@@ -135,7 +135,7 @@ export default function DriverDetails() {
           
           <div className="space-y-6">
             <Card className="flex flex-col gap-4">
-              <h4 className="text-body-lg font-bold tracking-tight border-b-4 border-border pb-2">Quick Actions</h4>
+              <h4 className="text-body-lg font-bold tracking-tight border- border-border pb-2">Quick Actions</h4>
               {['Fleet Manager', 'Dispatcher'].includes(user?.role) && (
                 <Button variant="primary" className="w-full" icon={<Calendar size={18} />} onClick={() => setActiveModal('leave')}>Schedule Leave</Button>
               )}

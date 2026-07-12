@@ -25,7 +25,7 @@ export default function Reports() {
                 <h4 className="text-body-lg font-bold tracking-tight mb-2">{report.title}</h4>
                 <p className="text-caption text-text-secondary">{report.description || report.license}</p>
               </div>
-              <div className="pt-4 border-t-4 border-border flex gap-3">
+              <div className="pt-4 border- border-border flex gap-3">
                 <Button variant="primary" className="flex-1" icon={<Download size={16} />}>Generate</Button>
                 <Button variant="outline" className="flex-1">Schedule</Button>
               </div>

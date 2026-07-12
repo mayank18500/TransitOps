@@ -70,7 +70,7 @@ export default function ExpenseDetails() {
             <InfoCard title="Expense Information" items={expenseInfo} />
             
             <Card className="flex flex-col gap-4">
-              <h4 className="text-body-lg font-bold tracking-tight border-b-4 border-border pb-2">Description & Notes</h4>
+              <h4 className="text-body-lg font-bold tracking-tight border- border-border pb-2">Description & Notes</h4>
               <p className="text-body text-text-secondary leading-relaxed">
                 {expense.description || 'No additional description provided.'}
               </p>
@@ -79,7 +79,7 @@ export default function ExpenseDetails() {
           
           <div className="space-y-6">
             <Card className="flex flex-col gap-4">
-              <h4 className="text-body-lg font-bold tracking-tight border-b-4 border-border pb-2">Quick Actions</h4>
+              <h4 className="text-body-lg font-bold tracking-tight border- border-border pb-2">Quick Actions</h4>
               <Button variant="primary" className="w-full" icon={<FileText size={18} />} onClick={() => setActiveModal('invoice')}>View Invoice</Button>
             </Card>
           </div>

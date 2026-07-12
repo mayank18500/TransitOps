@@ -16,7 +16,7 @@ export default function Settings() {
       <Section>
         <Grid cols={2} gap={8}>
           <Card className="flex flex-col gap-6">
-            <div className="flex items-center gap-4 border-b-4 border-border pb-6">
+            <div className="flex items-center gap-4 border- border-border pb-6">
               <Avatar name={user?.name || 'User'} size="xl" />
               <div>
                 <h3 className="text-h3 font-bold text-text-primary">{user?.name || 'User Profile'}</h3>

@@ -106,7 +106,7 @@ export const InfoCard = ({
   return (
     <Card className={cn('space-y-4', className)} {...props}>
       {title && (
-        <h4 className="text-body-lg font-bold tracking-tight border-b-4 border-border pb-2">
+        <h4 className="text-body-lg font-bold tracking-tight border- border-border pb-2">
           {title}
         </h4>
       )}

@@ -42,7 +42,7 @@ export const DataTable = ({
     <div className={cn('card !w-full !max-w-none !transform-none !transition-none before:!content-none after:!content-none !p-0 overflow-x-auto', className)} {...props}>
       <table className="w-full border-collapse text-left text-body">
         {/* Table Header */}
-        <thead className="bg-bg-base border-b-4 border-border text-tiny font-bold uppercase tracking-wider text-text-secondary select-none sticky top-0 z-sticky">
+        <thead className="bg-bg-base border- border-border text-tiny font-bold uppercase tracking-wider text-text-secondary select-none sticky top-0 z-sticky">
           <tr>
             {/* Selection Checkbox */}
             {onSelectAllRows && (

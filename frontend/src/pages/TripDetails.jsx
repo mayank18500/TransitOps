@@ -136,7 +136,7 @@ export default function TripDetails() {
             <InfoCard title="Shipment Details" items={tripInfo} />
             
             <Card className="flex flex-col gap-4">
-              <div className="flex justify-between items-center border-b-4 border-border pb-2">
+              <div className="flex justify-between items-center border- border-border pb-2">
                 <h4 className="text-body-lg font-bold tracking-tight">Route Progress</h4>
                 {hasTripManagementRole && (
                   <Button variant="ghost" size="sm" icon={<PenTool size={16} />} onClick={() => setActiveModal('edit')} disabled={trip.status === 'Completed' || trip.status === 'Cancelled'}>Edit Route</Button>
@@ -154,7 +154,7 @@ export default function TripDetails() {
           
           <div className="space-y-6">
             <Card className="flex flex-col gap-4">
-              <div className="flex justify-between items-center border-b-4 border-border pb-2">
+              <div className="flex justify-between items-center border- border-border pb-2">
                 <h4 className="text-body-lg font-bold tracking-tight">Assigned Personnel & Equipment</h4>
                 {hasTripManagementRole && (
                   <Button variant="ghost" size="sm" icon={<Users size={16} />} onClick={() => setActiveModal('assign')} disabled={trip.status !== 'Draft'}>Reassign</Button>

@@ -53,7 +53,7 @@ export const Modal = ({
             )}
           >
             {/* Header */}
-            <div className="flex items-center justify-between border-b-4 border-border pb-4 mb-4">
+            <div className="flex items-center justify-between border- border-border pb-4 mb-4">
               <h3 className="text-h3 font-bold tracking-tight text-text-primary">
                 {title}
               </h3>
@@ -127,7 +127,7 @@ export const Drawer = ({
             )}
           >
             {/* Header */}
-            <div className="flex items-center justify-between border-b-4 border-border pb-4 mb-4">
+            <div className="flex items-center justify-between border- border-border pb-4 mb-4">
               <h3 className="text-h3 font-bold tracking-tight text-text-primary">
                 {title}
               </h3>
@@ -163,7 +163,7 @@ export const ConfirmDialog = ({
     <Modal isOpen={isOpen} onClose={onClose} title={title} className="max-w-sm">
       <div className="space-y-6">
         <p className="text-body text-text-secondary">{description}</p>
-        <div className="flex items-center justify-end gap-3 border-t-4 border-border pt-4">
+        <div className="flex items-center justify-end gap-3 border- border-border pt-4">
           <Button variant="outline" size="sm" onClick={onClose}>
             {cancelText}
           </Button>

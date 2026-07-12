@@ -50,7 +50,7 @@ export const Tabs = ({
   return (
     <div
       className={cn(
-        'flex border-b-4 border-border space-x-6 relative',
+        'flex border- border-border space-x-6 relative',
         className
       )}
       {...props}
@@ -93,7 +93,7 @@ export const Pagination = ({
   return (
     <div
       className={cn(
-        'flex items-center justify-between border-t-4 border-border pt-4 mt-6',
+        'flex items-center justify-between border- border-border pt-4 mt-6',
         className
       )}
       {...props}

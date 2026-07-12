@@ -130,7 +130,7 @@ export default function VehicleDetails() {
             <InfoCard title="Vehicle Specifications" items={vehicleInfo} />
             
             <Card className="flex flex-col gap-4">
-              <h4 className="text-body-lg font-bold tracking-tight border-b-4 border-border pb-2">Current Load Status</h4>
+              <h4 className="text-body-lg font-bold tracking-tight border- border-border pb-2">Current Load Status</h4>
               <div className="text-caption space-y-1 mt-2">
                 <div className="flex justify-between text-text-muted">
                   <span>Capacity</span>
@@ -154,7 +154,7 @@ export default function VehicleDetails() {
           
           <div className="space-y-6">
             <Card className="flex flex-col gap-4">
-              <h4 className="text-body-lg font-bold tracking-tight border-b-4 border-border pb-2">Quick Actions</h4>
+              <h4 className="text-body-lg font-bold tracking-tight border- border-border pb-2">Quick Actions</h4>
               {user?.role === 'Dispatcher' && (
                 <Button variant="primary" className="w-full" icon={<ShieldAlert size={18} />} onClick={() => setActiveModal('dispatch')} disabled={vehicle.status !== 'Available'}>Dispatch to Trip</Button>
               )}
@@ -170,7 +170,7 @@ export default function VehicleDetails() {
             </Card>
 
             <Card className="flex flex-col gap-4">
-              <h4 className="text-body-lg font-bold tracking-tight border-b-4 border-border pb-2">Recent Fuel Logs</h4>
+              <h4 className="text-body-lg font-bold tracking-tight border- border-border pb-2">Recent Fuel Logs</h4>
               {vehicle.fuelLogs?.length > 0 ? (
                 vehicle.fuelLogs.slice(0, 3).map(log => (
                   <FuelCard key={log.id} vehicle={vehicle.registrationNumber} liters={log.liters} cost={log.cost} date={new Date(log.date).toISOString().split('T')[0]} odometer={vehicle.odometer} className="shadow-none border-border" />
