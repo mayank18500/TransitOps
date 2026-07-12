@@ -45,7 +45,7 @@ export const AuthProvider = ({ children }) => {
         try {
           // If we have a backend URL, we can verify session, otherwise restore from storage
           if (import.meta.env.VITE_API_URL) {
-            const res = await api.get('/api/auth/me');
+            const res = await api.get('/auth/me');
             setUser(res.data.user);
             setIsAuthenticated(true);
           } else {
@@ -68,7 +68,7 @@ export const AuthProvider = ({ children }) => {
     try {
       // If we are integrated with a backend API, send the POST request
       if (import.meta.env.VITE_API_URL) {
-        const res = await api.post('/api/auth/login', { email, password });
+        const res = await api.post('/auth/login', { email, password });
         const { token, user: loggedUser } = res.data;
         localStorage.setItem('token', token);
         localStorage.setItem('user', JSON.stringify(loggedUser));
