@@ -1,21 +1,19 @@
 import React, { useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { toast } from 'react-hot-toast';
-import { Shield, KeyRound, Mail, UserCheck } from 'lucide-react';
+
+import { Mail, KeyRound, Briefcase, Radio, Zap } from 'lucide-react';
 import { useAuth, DEMO_USERS } from '../context/AuthContext';
-import { Input } from './ui/Input';
-import { Button } from './ui/Button';
-import { Card } from './ui/Cards';
 
 export default function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
+
   const { login } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
 
-  // Redirect target after login
   const from = location.state?.from?.pathname || '/dashboard';
 
   const handleSubmit = async (e) => {
@@ -41,7 +39,7 @@ export default function Login() {
     setIsSubmitting(true);
     setEmail(user.email);
     setPassword(user.password);
-    
+
     const result = await login(user.email, user.password);
     setIsSubmitting(false);
 
@@ -53,82 +51,131 @@ export default function Login() {
     }
   };
 
+  const getRoleIcon = (role) => {
+    const roleLower = role.toLowerCase();
+    if (roleLower.includes('manager')) return <Briefcase size={16} />;
+    if (roleLower.includes('dispatcher')) return <Radio size={16} />;
+    return <Zap size={16} />;
+  };
+
   return (
-    <div className="space-y-6">
-      {/* Centered Login Card */}
-      <Card className="p-8 bg-bg-surface border border-border shadow-modal rounded-xl relative overflow-hidden">
-        {/* Abstract Glow Circle */}
-        <div className="absolute -top-24 -left-24 h-48 w-48 rounded-full bg-brand-primary/5 blur-2xl pointer-events-none" />
-        
-        {/* Brand Header */}
-        <div className="text-center space-y-2 mb-8 relative z-10">
-          <div className="inline-flex h-10 w-10 items-center justify-center rounded-l bg-brand-primary/10 border border-brand-primary/20 text-brand-primary mb-2">
-            <Shield className="h-5 w-5" />
+    <div className="brutalist-wrapper">
+      <div className="login-container">
+        <div className="card">
+          {/* Decorative Elements */}
+          <div className="card-pattern-grid" />
+          <div className="card-overlay-dots" />
+          <div className="bold-pattern">
+            <svg viewBox="0 0 100 100">
+              <path strokeDasharray="15 10" strokeWidth={10} stroke="#000" fill="none" d="M0,0 L100,0 L100,100 L0,100 Z" />
+            </svg>
           </div>
-          <h2 className="text-h3 font-bold tracking-tight text-text-primary">Welcome to TransitOps</h2>
-          <p className="text-caption text-text-secondary">Enter credentials or select a demo role below</p>
+
+          {/* Header */}
+          <div className="card-title-area">
+            <span>TransitOps</span>
+            <span className="card-tag">Portal</span>
+          </div>
+
+          <div className="card-body">
+            <div className="card-content-split">
+              <div className="left-panel">
+                <div className="card-description">
+                  Next-generation fleet intelligence. Enter your credentials or use the judge gateway below.
+                </div>
+
+                {/* Login Form */}
+                <form onSubmit={handleSubmit} className="form-wrapper">
+                  <div className="input-group">
+                    <Mail className="input-icon" size={18} />
+                    <input
+                      type="email"
+                      className="brutalist-input"
+                      placeholder="manager@transitops.com"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      disabled={isSubmitting}
+                      required
+                    />
+                  </div>
+                  <div className="input-group">
+                    <KeyRound className="input-icon" size={18} />
+                    <input
+                      type="password"
+                      className="brutalist-input"
+                      placeholder="••••••••"
+                      value={password}
+                      onChange={(e) => setPassword(e.target.value)}
+                      disabled={isSubmitting}
+                      required
+                    />
+                  </div>
+                  <button
+                    type="submit"
+                    className="card-button w-full"
+                    disabled={isSubmitting}
+                  >
+                    {isSubmitting ? 'Authenticating...' : 'Sign In'}
+                  </button>
+                </form>
+              </div>
+
+              <div className="right-panel">
+                {/* Divider */}
+                <div className="card-actions">
+                  <div className="price">
+                    <span className="price-currency">#</span>Demo
+                    <span className="price-period">Judge Gateway</span>
+                  </div>
+                </div>
+
+                {/* Demo Users Grid */}
+                <div className="feature-grid">
+                  {DEMO_USERS.map((user) => (
+                    <button
+                      key={user.role}
+                      type="button"
+                      onClick={() => handleQuickLogin(user)}
+                      disabled={isSubmitting}
+                      className="feature-item"
+                    >
+                      <div className="feature-icon">
+                        {getRoleIcon(user.role)}
+                      </div>
+                      <div className="feature-text-wrapper">
+                        <span className="feature-text">{user.role}</span>
+                        <span className="feature-subtext">{user.name}</span>
+                      </div>
+                    </button>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Bottom Decorations */}
+          <div className="dots-pattern">
+            <svg viewBox="0 0 80 40">
+              <circle fill="#000" r={3} cy={10} cx={10} />
+              <circle fill="#000" r={3} cy={10} cx={30} />
+              <circle fill="#000" r={3} cy={10} cx={50} />
+              <circle fill="#000" r={3} cy={10} cx={70} />
+              <circle fill="#000" r={3} cy={20} cx={20} />
+              <circle fill="#000" r={3} cy={20} cx={40} />
+              <circle fill="#000" r={3} cy={20} cx={60} />
+              <circle fill="#000" r={3} cy={30} cx={10} />
+              <circle fill="#000" r={3} cy={30} cx={30} />
+              <circle fill="#000" r={3} cy={30} cx={50} />
+              <circle fill="#000" r={3} cy={30} cx={70} />
+            </svg>
+          </div>
+          <div className="accent-shape" />
+          <div className="corner-slice" />
+          <div className="stamp">
+            <span className="stamp-text">Secured</span>
+          </div>
         </div>
-
-        {/* Input Form */}
-        <form onSubmit={handleSubmit} className="space-y-5 relative z-10">
-          <Input
-            type="email"
-            label="Email Address"
-            placeholder="e.g. manager@transitops.com"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            icon={<Mail className="h-4.5 w-4.5" />}
-            isDisabled={isSubmitting}
-            required
-          />
-
-          <Input
-            type="password"
-            label="Password"
-            placeholder="••••••••"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            icon={<KeyRound className="h-4.5 w-4.5" />}
-            isDisabled={isSubmitting}
-            required
-          />
-
-          <Button
-            type="submit"
-            variant="primary"
-            size="lg"
-            className="w-full mt-2 h-11"
-            isLoading={isSubmitting}
-          >
-            Sign In
-          </Button>
-        </form>
-      </Card>
-
-      {/* Judge Quick Login Box */}
-      <Card className="p-5 bg-bg-surface-elevated/40 border border-border/60 rounded-l space-y-4">
-        <div className="flex items-center gap-2 border-b border-border-muted pb-2 text-text-secondary">
-          <UserCheck className="h-4 w-4 text-brand-primary" />
-          <span className="text-tiny font-semibold uppercase tracking-wider">Judge Demo Gateway</span>
-        </div>
-        <div className="grid grid-cols-2 gap-2.5">
-          {DEMO_USERS.map((user) => (
-            <button
-              key={user.role}
-              type="button"
-              onClick={() => handleQuickLogin(user)}
-              className="flex flex-col items-start p-2.5 rounded-m border border-border bg-bg-surface/50 text-left hover:border-brand-primary/50 hover:bg-bg-hover active:scale-98 transition-all duration-fast focus:outline-none focus:ring-1 focus:ring-brand-primary group"
-            >
-              <span className="text-caption font-bold text-text-primary group-hover:text-brand-primary transition-colors">
-                {user.role}
-              </span>
-              <span className="text-tiny text-text-muted mt-0.5 truncate w-full">
-                {user.name}
-              </span>
-            </button>
-          ))}
-        </div>
-      </Card>
+      </div>
     </div>
   );
 }
