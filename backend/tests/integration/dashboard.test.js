@@ -6,18 +6,12 @@ import jwt from 'jsonwebtoken';
 
 vi.mock('../../src/lib/prisma.js', () => ({
   default: {
-    fuelLog: {
-      aggregate: vi.fn(),
-    },
-    maintenance: {
-      aggregate: vi.fn(),
-    },
-    expense: {
-      aggregate: vi.fn(),
-    },
-    vehicle: {
-      findMany: vi.fn(),
-    },
+    fuelLog: { aggregate: vi.fn(), findMany: vi.fn() },
+    maintenance: { aggregate: vi.fn(), findMany: vi.fn() },
+    expense: { aggregate: vi.fn(), findMany: vi.fn() },
+    vehicle: { findMany: vi.fn(), count: vi.fn() },
+    trip: { findMany: vi.fn(), count: vi.fn() },
+    driver: { findMany: vi.fn(), count: vi.fn(), aggregate: vi.fn() }
   },
 }));
 
@@ -30,6 +24,23 @@ const driverToken = jwt.sign({ userId: 'driver-1', role: 'Driver' }, JWT_SECRET)
 describe('Dashboard Analytics Endpoint', () => {
   beforeEach(() => {
     vi.clearAllMocks();
+    
+    // Default mocks for the new dashboard service
+    prisma.vehicle.count.mockResolvedValue(0);
+    prisma.trip.count.mockResolvedValue(0);
+    prisma.driver.count.mockResolvedValue(0);
+    
+    prisma.vehicle.findMany.mockResolvedValue([]);
+    prisma.trip.findMany.mockResolvedValue([]);
+    prisma.driver.findMany.mockResolvedValue([]);
+    prisma.maintenance.findMany.mockResolvedValue([]);
+    prisma.expense.findMany.mockResolvedValue([]);
+    prisma.fuelLog.findMany.mockResolvedValue([]);
+    
+    prisma.driver.aggregate.mockResolvedValue({ _avg: { safetyScore: 0 } });
+    prisma.fuelLog.aggregate.mockResolvedValue({ _sum: { cost: 0 } });
+    prisma.maintenance.aggregate.mockResolvedValue({ _sum: { cost: 0 } });
+    prisma.expense.aggregate.mockResolvedValue({ _sum: { amount: 0 } });
   });
 
   describe('Authorization Checks', () => {
@@ -46,11 +57,6 @@ describe('Dashboard Analytics Endpoint', () => {
     });
 
     it('should allow Dispatcher to retrieve dashboard stats', async () => {
-      prisma.fuelLog.aggregate.mockResolvedValue({ _sum: { cost: null } });
-      prisma.maintenance.aggregate.mockResolvedValue({ _sum: { cost: null } });
-      prisma.expense.aggregate.mockResolvedValue({ _sum: { amount: null } });
-      prisma.vehicle.findMany.mockResolvedValue([]);
-
       const res = await request(app)
         .get('/api/dashboard')
         .set('Authorization', `Bearer ${dispatcherToken}`);
@@ -65,14 +71,13 @@ describe('Dashboard Analytics Endpoint', () => {
       prisma.maintenance.aggregate.mockResolvedValue({ _sum: { cost: 3500.00 } });
       prisma.expense.aggregate.mockResolvedValue({ _sum: { amount: 300.25 } });
 
-      // Mock fleet status
-      // Total vehicles: 4, Retired: 1. Operational denominator = 3. On Trip: 1. Utilization = (1/3)*100 = 33.33%
-      prisma.vehicle.findMany.mockResolvedValue([
-        { id: 'v1', status: 'On Trip' },
-        { id: 'v2', status: 'Available' },
-        { id: 'v3', status: 'Retired' },
-        { id: 'v4', status: 'Available' }
-      ]);
+      // Mock fleet status for legacy test
+      prisma.vehicle.count.mockImplementation(async (args) => {
+        if (!args) return 4; // Total vehicles
+        if (args.where.status === 'Retired') return 1; // Retired count
+        if (args.where.status === 'On Trip') return 1; // On trip count
+        return 0;
+      });
 
       const res = await request(app)
         .get('/api/dashboard')
@@ -80,6 +85,7 @@ describe('Dashboard Analytics Endpoint', () => {
 
       expect(res.status).toBe(200);
       expect(res.body.totalOperationalCost).toBe(5000.75); // 1200.50 + 3500 + 300.25
+      // 4 total - 1 retired = 3 active. 1 on trip / 3 = 33.33%
       expect(res.body.fleetUtilization).toBeCloseTo(33.33, 1);
     });
 
@@ -87,7 +93,7 @@ describe('Dashboard Analytics Endpoint', () => {
       prisma.fuelLog.aggregate.mockResolvedValue({ _sum: { cost: null } });
       prisma.maintenance.aggregate.mockResolvedValue({ _sum: { cost: null } });
       prisma.expense.aggregate.mockResolvedValue({ _sum: { amount: null } });
-      prisma.vehicle.findMany.mockResolvedValue([]); // Total: 0, denominator: 0
+      prisma.vehicle.count.mockResolvedValue(0);
 
       const res = await request(app)
         .get('/api/dashboard')

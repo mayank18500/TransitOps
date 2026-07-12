@@ -5,6 +5,7 @@ export const getDashboardStats = async (req, res) => {
     const stats = await dashboardService.getDashboardStats();
     res.status(200).json(stats);
   } catch (error) {
+    console.error("Dashboard error:", error);
     res.status(500).json({ message: error.message });
   }
 };
