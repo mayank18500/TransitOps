@@ -5,7 +5,7 @@ import { requireRole } from '../middleware/rbac.middleware.js';
 
 const router = Router();
 
-router.use(verifyToken, requireRole(['Fleet Manager', 'Financial Analyst', 'Dispatcher']));
+router.use(verifyToken, requireRole(['Fleet Manager', 'Financial Analyst', 'Dispatcher', 'Safety Officer']));
 
 router.get('/', dashboardController.getDashboardStats);
 
