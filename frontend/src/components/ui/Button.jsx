@@ -13,24 +13,46 @@ export const Button = React.forwardRef(({
   iconPosition = 'left',
   ...props
 }, ref) => {
-  const baseStyles = 'inline-flex items-center justify-center font-sans font-semibold tracking-tight transition-all duration-fast ease-micro outline-none focus-visible:ring-2 focus-visible:ring-border-focus focus-visible:ring-offset-2 focus-visible:ring-offset-bg-base';
+  const baseStyles = 'card-button inline-flex items-center justify-center !font-sans !font-semibold !tracking-tight focus-visible:ring-2 focus-visible:ring-border-focus focus-visible:ring-offset-2 focus-visible:ring-offset-bg-base';
 
   const variants = {
-    primary: 'bg-brand-primary text-brand-primary-fg hover:bg-brand-primary-hover active:bg-brand-primary-active border border-transparent shadow-s',
-    secondary: 'bg-bg-surface-elevated text-text-primary hover:bg-bg-hover active:bg-bg-active border border-border shadow-s',
-    outline: 'bg-transparent text-text-primary border border-border hover:bg-bg-surface active:bg-bg-hover',
-    ghost: 'bg-transparent text-text-secondary hover:bg-bg-hover hover:text-text-primary active:bg-bg-active',
-    danger: 'bg-danger text-brand-primary-fg hover:bg-danger-fg active:bg-danger/80 border border-transparent shadow-s',
+    primary: {
+      '--secondary': 'rgb(var(--primary))',
+      '--secondary-hover': 'rgb(var(--primary-hover))',
+      '--bg': 'rgb(var(--primary-fg))',
+    },
+    secondary: {
+      '--secondary': 'rgb(var(--bg-base))',
+      '--secondary-hover': 'rgb(var(--bg-surface-elevated))',
+      '--bg': 'rgb(var(--text-primary))',
+    },
+    outline: {
+      '--secondary': 'transparent',
+      '--secondary-hover': 'rgba(var(--bg-hover-rgb) / 0.1)',
+      '--bg': 'rgb(var(--text-primary))',
+    },
+    ghost: {
+      '--secondary': 'transparent',
+      '--secondary-hover': 'rgba(var(--bg-hover-rgb) / 0.1)',
+      '--bg': 'rgb(var(--text-secondary))',
+      '--shadow-color': 'transparent',
+      border: 'none',
+    },
+    danger: {
+      '--secondary': 'rgb(var(--danger))',
+      '--secondary-hover': 'rgb(var(--danger-fg))',
+      '--bg': '#ffffff',
+    },
   };
 
   const sizes = {
-    sm: 'h-8 px-3 text-tiny rounded-s gap-1.5',
-    md: 'h-10 px-4 text-caption rounded-m gap-2',
-    lg: 'h-12 px-6 text-body rounded-l gap-2.5',
-    xl: 'h-14 px-8 text-h4 rounded-xl gap-3',
+    sm: '!h-8 !px-3 !text-tiny !rounded-s gap-1.5',
+    md: '!h-10 !px-4 !text-caption !rounded-m gap-2',
+    lg: '!h-12 !px-6 !text-body !rounded-l gap-2.5',
+    xl: '!h-14 !px-8 !text-h4 !rounded-xl gap-3',
   };
 
-  const selectedVariant = variants[variant] || variants.primary;
+  const selectedVariantStyle = variants[variant] || variants.primary;
   const selectedSize = sizes[size] || sizes.md;
   const isButtonDisabled = isDisabled || isLoading;
 
@@ -38,13 +60,11 @@ export const Button = React.forwardRef(({
     <m.button
       ref={ref}
       disabled={isButtonDisabled}
-      whileHover={!isButtonDisabled ? { y: -1, boxShadow: 'var(--shadow-m)' } : {}}
-      whileTap={!isButtonDisabled ? { scale: 0.98 } : {}}
+      style={{ ...selectedVariantStyle, ...props.style }}
       className={cn(
         baseStyles,
-        selectedVariant,
         selectedSize,
-        isButtonDisabled && 'opacity-50 cursor-not-allowed pointer-events-none bg-bg-disabled text-text-disabled border-border-muted shadow-none',
+        isButtonDisabled && '!opacity-50 !cursor-not-allowed !pointer-events-none !bg-bg-disabled !text-text-disabled !border-border-muted !shadow-none',
         className
       )}
       {...props}

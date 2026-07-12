@@ -38,7 +38,7 @@ export const VehicleCard = ({
           <Progress value={currentWeight} max={payloadCapacity} />
         </div>
 
-        <div className="flex items-center justify-between border-t border-border-muted pt-3 text-caption text-text-muted">
+        <div className="flex items-center justify-between border-t border-border pt-3 text-caption text-text-muted">
           <span>Odometer: <strong className="text-text-secondary font-semibold">{odometer} km</strong></span>
           {onAction && (
             <button
@@ -91,7 +91,7 @@ export const DriverCard = ({
           <Progress value={safetyScore} max={100} />
         </div>
 
-        <div className="flex items-center justify-between border-t border-border-muted pt-3 text-caption text-text-muted">
+        <div className="flex items-center justify-between border-t border-border pt-3 text-caption text-text-muted">
           <span>Expires: <strong className="text-text-secondary font-semibold">{licenseExpiry}</strong></span>
           {onAction && (
             <button
@@ -131,7 +131,7 @@ export const TripCard = ({
         <StatusChip status={status} />
       </div>
 
-      <div className="grid grid-cols-2 gap-2 text-caption text-text-muted border-t border-b border-border-muted py-2.5 my-1">
+      <div className="grid grid-cols-2 gap-2 text-caption text-text-muted border-t border-b border-border py-2.5 my-1">
         <div>
           <span>Vehicle</span>
           <p className="text-text-primary font-semibold">{vehicle}</p>
@@ -168,7 +168,7 @@ export const MaintenanceCard = ({
   ...props
 }) => {
   return (
-    <Card isHoverable className={cn('flex flex-col gap-4 bg-bg-surface-elevated/40', className)} {...props}>
+    <Card isHoverable className={cn('flex flex-col gap-4', className)} {...props}>
       <div className="flex items-start justify-between gap-3">
         <div className="space-y-1">
           <h4 className="text-body-lg font-bold tracking-tight text-text-primary flex items-center gap-2">
@@ -177,15 +177,12 @@ export const MaintenanceCard = ({
           </h4>
           <p className="text-caption text-text-secondary">{type}</p>
         </div>
-        <span className={cn(
-          'text-tiny font-bold uppercase px-2 py-0.5 rounded-full border',
-          status === 'Resolved' ? 'bg-success/10 text-success-fg border-success/20' : 'bg-warning/10 text-warning-fg border-warning/20'
-        )}>
+        <Badge variant={status === 'Resolved' ? 'success' : 'warning'}>
           {status}
-        </span>
+        </Badge>
       </div>
 
-      <div className="flex items-center justify-between border-t border-border-muted pt-3 text-caption text-text-muted">
+      <div className="flex items-center justify-between border-t border-border pt-3 text-caption text-text-muted">
         <span className="flex items-center gap-1.5">
           <Calendar className="h-3.5 w-3.5" />
           {startDate}
@@ -218,7 +215,7 @@ export const FuelCard = ({
         <Badge variant="info">Fuel</Badge>
       </div>
 
-      <div className="grid grid-cols-2 gap-2 text-caption text-text-muted border-t border-b border-border-muted py-2.5 my-1">
+      <div className="grid grid-cols-2 gap-2 text-caption text-text-muted border-t border-b border-border py-2.5 my-1">
         <div>
           <span>Quantity</span>
           <p className="text-text-primary font-semibold">{liters} L</p>
@@ -261,7 +258,7 @@ export const ExpenseCard = ({
         </Badge>
       </div>
 
-      <div className="flex items-center justify-between border-t border-border-muted pt-3 text-caption text-text-muted">
+      <div className="flex items-center justify-between border-t border-border pt-3 text-caption text-text-muted">
         <span>Date: <strong className="text-text-secondary font-semibold">{date}</strong></span>
         <span className="font-bold text-text-primary">${cost}</span>
       </div>

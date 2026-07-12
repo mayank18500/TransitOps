@@ -10,21 +10,17 @@ export const Card = React.forwardRef(({
   ...props
 }, ref) => {
   return (
-    <m.div
+    <div
       ref={ref}
-      whileHover={isHoverable ? { y: -2, borderColor: 'rgba(255,255,255,0.12)', boxShadow: 'var(--shadow-l)' } : {}}
-      transition={{ duration: 0.15, ease: 'easeOut' }}
       className={cn(
-        'rounded-l border border-border bg-bg-surface p-6 shadow-m relative overflow-hidden transition-all duration-fast',
-        isGlass && 'bg-glass-bg border-glass-border backdrop-blur-md shadow-floating',
+        'card !w-full !max-w-none before:!content-none after:!content-none',
+        !isHoverable && 'hover:!transform-none hover:!shadow-[0.7em_0.7em_0_var(--shadow-color)]',
         className
       )}
       {...props}
     >
-      {/* Subtle top reflection overlay */}
-      <div className="absolute top-0 inset-x-0 h-[1px] bg-gradient-to-r from-transparent via-white/5 to-transparent pointer-events-none" />
       {children}
-    </m.div>
+    </div>
   );
 });
 
@@ -109,7 +105,7 @@ export const InfoCard = ({
   return (
     <Card className={cn('space-y-4', className)} {...props}>
       {title && (
-        <h4 className="text-body-lg font-bold tracking-tight border-b border-border-muted pb-2">
+        <h4 className="text-body-lg font-bold tracking-tight border-b-4 border-border pb-2">
           {title}
         </h4>
       )}

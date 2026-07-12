@@ -8,20 +8,41 @@ export const Badge = ({
   children,
   ...props
 }) => {
-  const baseStyles = 'inline-flex items-center px-2 py-0.5 rounded-full text-tiny font-semibold tracking-wider uppercase';
+  const baseStyles = 'card-tag !inline-flex !items-center';
 
   const variants = {
-    brand: 'bg-brand-primary/10 text-brand-primary border border-brand-primary/20',
-    success: 'bg-success/10 text-success-fg border border-success/20',
-    warning: 'bg-warning/10 text-warning-fg border border-warning/20',
-    danger: 'bg-danger/10 text-danger-fg border border-danger/20',
-    info: 'bg-info/10 text-info-fg border border-info/20',
-    muted: 'bg-bg-surface-elevated text-text-secondary border border-border',
+    brand: {
+      '--bg': 'rgb(var(--primary))',
+      '--text': 'rgb(var(--primary-fg))',
+    },
+    success: {
+      '--bg': 'rgb(var(--success))',
+      '--text': 'rgb(var(--success-fg))',
+    },
+    warning: {
+      '--bg': 'rgb(var(--warning))',
+      '--text': 'rgb(var(--warning-fg))',
+    },
+    danger: {
+      '--bg': 'rgb(var(--danger))',
+      '--text': '#ffffff',
+    },
+    info: {
+      '--bg': 'rgb(var(--info))',
+      '--text': '#ffffff',
+    },
+    muted: {
+      '--bg': 'rgb(var(--bg-surface-elevated))',
+      '--text': 'rgb(var(--text-secondary))',
+    },
   };
+
+  const selectedVariantStyle = variants[variant] || variants.brand;
 
   return (
     <span
-      className={cn(baseStyles, variants[variant] || variants.brand, className)}
+      style={{ ...selectedVariantStyle, ...props.style }}
+      className={cn(baseStyles, className)}
       {...props}
     >
       {children}
@@ -75,7 +96,7 @@ export const Progress = ({
 
   return (
     <div className={cn('w-full space-y-1.5', className)} {...props}>
-      <div className="relative h-2 w-full overflow-hidden rounded-full bg-bg-surface-elevated border border-border-muted">
+      <div className="relative h-2 w-full overflow-hidden rounded-full bg-bg-surface-elevated border border-border">
         <m.div
           initial={{ width: 0 }}
           animate={{ width: `${percentage}%` }}
