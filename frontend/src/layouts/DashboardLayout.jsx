@@ -26,7 +26,7 @@ export default function DashboardLayout() {
 
       {/* Navigation Sidebar */}
       <aside
-        className={`fixed inset-y-0 left-0 z-sidebar flex w-64 flex-col border-r border-border bg-bg-surface p-6 transition-transform duration-normal ease-standard lg:static lg:translate-x-0 ${
+        className={`fixed inset-y-0 left-0 z-sidebar flex w-64 flex-col border-r-4 border-border bg-bg-surface p-6 transition-transform duration-normal ease-standard lg:static lg:translate-x-0 ${
           isSidebarOpen ? 'translate-x-0' : '-translate-x-full'
         }`}
       >
@@ -86,7 +86,7 @@ export default function DashboardLayout() {
         </nav>
 
         {/* Sidebar Footer Operations */}
-        <div className="border-t border-border pt-4 space-y-4">
+        <div className="border-t-4 border-border pt-4 space-y-4">
           <div className="flex items-center gap-3 px-3">
             <Avatar name={user?.name || 'User'} size="sm" />
             <div className="flex flex-col min-w-0">
@@ -116,7 +116,7 @@ export default function DashboardLayout() {
       {/* Main View Port Canvas */}
       <div className="flex flex-1 flex-col">
         {/* Contextual Topbar header */}
-        <header className="sticky top-0 z-topbar flex h-16 items-center justify-between border-b border-border bg-glass-bg px-6 backdrop-blur-md">
+        <header className="sticky top-0 z-topbar flex h-16 items-center justify-between border-b-4 border-border bg-bg-surface px-6">
           <div className="flex items-center gap-4">
             <button
               className="rounded-m p-1.5 hover:bg-bg-hover lg:hidden"

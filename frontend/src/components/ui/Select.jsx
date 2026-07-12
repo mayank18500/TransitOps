@@ -23,11 +23,11 @@ export const Select = React.forwardRef(({
         <select
           ref={ref}
           disabled={isDisabled || isLoading}
+          style={{ '--primary': error ? 'rgb(var(--danger))' : 'rgb(var(--primary))', ...props.style }}
           className={cn(
-            'w-full h-10 bg-bg-surface-elevated text-text-primary border border-border rounded-m pl-3.5 pr-10 text-caption font-sans outline-none appearance-none transition-all duration-fast ease-micro',
-            'focus:border-brand-primary focus:ring-1 focus:ring-brand-primary',
-            error && 'border-danger focus:border-danger focus:ring-danger',
-            (isDisabled || isLoading) && 'opacity-50 cursor-not-allowed bg-bg-disabled text-text-disabled border-border-muted',
+            'brutalist-input !h-11 !pl-3.5 !pr-10 !text-body !appearance-none',
+            error && '!border-danger',
+            (isDisabled || isLoading) && '!opacity-50 !cursor-not-allowed !bg-bg-disabled !text-text-disabled !border-border-muted',
             className
           )}
           {...props}

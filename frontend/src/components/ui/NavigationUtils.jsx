@@ -50,7 +50,7 @@ export const Tabs = ({
   return (
     <div
       className={cn(
-        'flex border-b border-border-muted space-x-6 relative',
+        'flex border-b-4 border-border space-x-6 relative',
         className
       )}
       {...props}
@@ -70,7 +70,7 @@ export const Tabs = ({
             {isActive && (
               <m.div
                 layoutId="activeTabUnderline"
-                className="absolute bottom-0 inset-x-0 h-0.5 bg-brand-primary"
+                className="absolute bottom-[-4px] inset-x-0 h-[4px] bg-brand-primary"
                 transition={{ type: 'spring', stiffness: 380, damping: 30 }}
               />
             )}
@@ -93,7 +93,7 @@ export const Pagination = ({
   return (
     <div
       className={cn(
-        'flex items-center justify-between border-t border-border-muted pt-4 mt-6',
+        'flex items-center justify-between border-t-4 border-border pt-4 mt-6',
         className
       )}
       {...props}
@@ -141,7 +141,7 @@ export const SearchBar = ({
           value={value}
           onChange={(e) => onChange(e.target.value)}
           placeholder={placeholder}
-          className="w-full h-10 pl-10 pr-4 bg-bg-surface-elevated text-text-primary border border-border rounded-m text-caption outline-none transition-all duration-fast placeholder:text-text-disabled focus:border-brand-primary focus:ring-1 focus:ring-brand-primary"
+          className="brutalist-input !h-10 !pl-10 !text-body"
         />
       </div>
       {onFilterToggle && (
