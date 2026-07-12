@@ -1,30 +1,47 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { PageHeader, Section } from '../components/ui/LayoutUtils';
 import { SearchBar, Pagination } from '../components/ui/NavigationUtils';
 import { Button } from '../components/ui/Button';
 import { DataTable } from '../components/ui/DataTable';
 import { StatusChip } from '../components/ui/Feedback';
 import { Plus } from 'lucide-react';
+import { vehicleService } from '../services/vehicle.service';
 
 export default function Vehicles() {
   const [search, setSearch] = useState('');
+  const [vehicles, setVehicles] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState(null);
+  
+  useEffect(() => {
+    fetchVehicles();
+  }, []);
+
+  const fetchVehicles = async () => {
+    try {
+      setIsLoading(true);
+      const data = await vehicleService.getVehicles();
+      setVehicles(data);
+    } catch (err) {
+      setError(err.message || 'Failed to fetch vehicles');
+    } finally {
+      setIsLoading(false);
+    }
+  };
   
   const columns = [
-    { key: 'plateNumber', label: 'Plate Number', sortable: true },
+    { key: 'registrationNumber', label: 'Plate Number', sortable: true },
     { key: 'model', label: 'Model', sortable: true },
-    { key: 'payloadCapacity', label: 'Capacity (kg)', sortable: true },
+    { key: 'maxLoadCapacity', label: 'Capacity (kg)', sortable: true },
     { key: 'odometer', label: 'Odometer (km)', sortable: true },
     { key: 'status', label: 'Status', sortable: true, render: (row) => <StatusChip status={row.status} /> },
     { key: 'actions', label: 'Actions', render: () => <Button variant="ghost" size="sm">View</Button> }
   ];
 
-  const data = [
-    { id: 1, plateNumber: 'TRK-9821', model: 'Volvo FH16', payloadCapacity: 20000, odometer: 145000, status: 'Available' },
-    { id: 2, plateNumber: 'TRK-7734', model: 'Scania R500', payloadCapacity: 24000, odometer: 89000, status: 'On Trip' },
-    { id: 3, plateNumber: 'TRK-1123', model: 'Mercedes Actros', payloadCapacity: 18000, odometer: 210000, status: 'In Shop' },
-    { id: 4, plateNumber: 'TRK-4452', model: 'Volvo FH16', payloadCapacity: 20000, odometer: 320000, status: 'Retired' },
-    { id: 5, plateNumber: 'TRK-8812', model: 'Peterbilt 579', payloadCapacity: 22000, odometer: 55000, status: 'Available' },
-  ];
+  const filteredVehicles = vehicles.filter(v => 
+    v.registrationNumber.toLowerCase().includes(search.toLowerCase()) || 
+    v.model.toLowerCase().includes(search.toLowerCase())
+  );
 
   return (
     <div className="space-y-8 animate-fade-in">
@@ -36,8 +53,18 @@ export default function Vehicles() {
       
       <Section>
         <SearchBar value={search} onChange={setSearch} placeholder="Search by plate number or model..." isFilterActive={false} onFilterToggle={() => {}} />
-        <DataTable columns={columns} data={data} onSort={(conf) => console.log(conf)} />
-        <Pagination currentPage={1} totalPages={3} onPageChange={() => {}} />
+        
+        {isLoading ? (
+          <div className="p-8 text-center text-text-secondary">Loading vehicles...</div>
+        ) : error ? (
+          <div className="p-8 text-center text-status-error">{error}</div>
+        ) : (
+          <DataTable columns={columns} data={filteredVehicles} onSort={(conf) => console.log(conf)} />
+        )}
+        
+        {!isLoading && !error && (
+          <Pagination currentPage={1} totalPages={Math.ceil(filteredVehicles.length / 10) || 1} onPageChange={() => {}} />
+        )}
       </Section>
     </div>
   );
