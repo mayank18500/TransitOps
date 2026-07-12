@@ -1,29 +1,44 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { PageHeader, Section } from '../components/ui/LayoutUtils';
 import { SearchBar, Pagination } from '../components/ui/NavigationUtils';
 import { Button } from '../components/ui/Button';
 import { DataTable } from '../components/ui/DataTable';
 import { StatusChip } from '../components/ui/Feedback';
 import { Plus } from 'lucide-react';
+import api from '../lib/axios';
 
 export default function Maintenance() {
   const [search, setSearch] = useState('');
+  const [maintenance, setMaintenance] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
   
   const columns = [
-    { key: 'vehicle', label: 'Vehicle', sortable: true },
-    { key: 'type', label: 'Maintenance Type', sortable: true },
-    { key: 'startDate', label: 'Start Date', sortable: true },
+    { key: 'vehicle', label: 'Vehicle', sortable: true, render: (row) => row.vehicle?.registrationNumber || 'Unknown' },
+    { key: 'description', label: 'Maintenance Type', sortable: true },
+    { key: 'date', label: 'Date', sortable: true, render: (row) => new Date(row.date).toLocaleDateString() },
     { key: 'cost', label: 'Cost', sortable: true, render: (row) => <span className="font-bold">${row.cost}</span> },
     { key: 'status', label: 'Status', sortable: true, render: (row) => <StatusChip status={row.status} /> },
     { key: 'actions', label: 'Actions', render: () => <Button variant="ghost" size="sm">Details</Button> }
   ];
 
-  const data = [
-    { id: 1, vehicle: 'TRK-9821', type: 'Engine Oil Change', startDate: '2026-07-15', cost: 450, status: 'Pending' },
-    { id: 2, vehicle: 'TRK-3341', type: 'Brake Pad Replacement', startDate: '2026-07-10', cost: 850, status: 'Resolved' },
-    { id: 3, vehicle: 'TRK-1123', type: 'Transmission Service', startDate: '2026-07-08', cost: 1200, status: 'Resolved' },
-    { id: 4, vehicle: 'TRK-7734', type: 'Tire Replacement', startDate: '2026-07-18', cost: 2400, status: 'Scheduled' },
-  ];
+  useEffect(() => {
+    const fetchMaintenance = async () => {
+      try {
+        const response = await api.get('/api/maintenance');
+        setMaintenance(response.data);
+      } catch (error) {
+        console.error('Failed to fetch maintenance logs', error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    fetchMaintenance();
+  }, []);
+
+  const filteredLogs = maintenance.filter((m) => 
+    m.vehicle?.registrationNumber?.toLowerCase().includes(search.toLowerCase()) || 
+    m.description?.toLowerCase().includes(search.toLowerCase())
+  );
 
   return (
     <div className="space-y-8 animate-fade-in">
@@ -35,8 +50,16 @@ export default function Maintenance() {
       
       <Section>
         <SearchBar value={search} onChange={setSearch} placeholder="Search maintenance logs..." isFilterActive={false} onFilterToggle={() => {}} />
-        <DataTable columns={columns} data={data} onSort={(conf) => console.log(conf)} />
-        <Pagination currentPage={1} totalPages={3} onPageChange={() => {}} />
+        
+        {isLoading ? (
+          <div className="flex h-64 items-center justify-center">
+            <div className="h-8 w-8 animate-spin rounded-full border-4 border-border border-t-brand-primary" />
+          </div>
+        ) : (
+          <DataTable columns={columns} data={filteredLogs} onSort={(conf) => console.log(conf)} />
+        )}
+        
+        <Pagination currentPage={1} totalPages={Math.max(1, Math.ceil(filteredLogs.length / 10))} onPageChange={() => {}} />
       </Section>
     </div>
   );

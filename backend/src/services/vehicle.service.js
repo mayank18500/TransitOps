@@ -6,7 +6,11 @@ export const getAllVehicles = async () => {
 
 export const getVehicleById = async (id) => {
   return await prisma.vehicle.findUnique({
-    where: { id }
+    where: { id },
+    include: {
+      maintenanceLogs: { orderBy: { date: 'desc' } },
+      fuelLogs: { orderBy: { date: 'desc' } },
+    }
   });
 };
 

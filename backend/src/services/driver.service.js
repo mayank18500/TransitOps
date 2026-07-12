@@ -6,7 +6,13 @@ export const getAllDrivers = async () => {
 
 export const getDriverById = async (id) => {
   return await prisma.driver.findUnique({
-    where: { id }
+    where: { id },
+    include: {
+      trips: {
+        include: { vehicle: true },
+        orderBy: { id: 'desc' }
+      }
+    }
   });
 };
 

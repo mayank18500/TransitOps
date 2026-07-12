@@ -42,13 +42,12 @@ export const Input = React.forwardRef(({
           ref={ref}
           type={resolvedType}
           disabled={isDisabled || isLoading}
-          style={{ '--primary': error ? 'rgb(var(--danger))' : 'rgb(var(--primary))', ...props.style }}
           className={cn(
-            'brutalist-input !h-11',
-            !(isSearch || icon) && '!pl-3.5',
-            isPassword && '!pr-10',
-            error && '!border-danger',
-            (isDisabled || isLoading) && '!opacity-50 !cursor-not-allowed !bg-bg-disabled !text-text-disabled !border-border-muted',
+            'w-full bg-bg-surface border border-border-default rounded-lg h-11 text-body text-text-primary placeholder:text-text-muted outline-none transition-all focus:ring-2 focus:ring-primary/20 focus:border-primary',
+            (isSearch || icon) ? 'pl-10' : 'pl-3.5',
+            isPassword ? 'pr-10' : 'pr-3.5',
+            error && 'border-danger focus:border-danger focus:ring-danger/20',
+            (isDisabled || isLoading) && 'opacity-60 cursor-not-allowed bg-bg-disabled',
             className
           )}
           {...props}
@@ -101,11 +100,10 @@ export const Textarea = React.forwardRef(({
         ref={ref}
         rows={rows}
         disabled={isDisabled || isLoading}
-        style={{ '--primary': error ? 'rgb(var(--danger))' : 'rgb(var(--primary))', ...props.style }}
         className={cn(
-          'brutalist-input !h-auto !py-3.5 !px-3.5 !resize-y',
-          error && '!border-danger',
-          (isDisabled || isLoading) && '!opacity-50 !cursor-not-allowed !bg-bg-disabled !text-text-disabled !border-border-muted',
+          'w-full bg-bg-surface border border-border-default rounded-lg py-3.5 px-3.5 resize-y text-body text-text-primary placeholder:text-text-muted outline-none transition-all focus:ring-2 focus:ring-primary/20 focus:border-primary',
+          error && 'border-danger focus:border-danger focus:ring-danger/20',
+          (isDisabled || isLoading) && 'opacity-60 cursor-not-allowed bg-bg-disabled',
           className
         )}
         {...props}

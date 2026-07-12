@@ -8,41 +8,24 @@ export const Badge = ({
   children,
   ...props
 }) => {
-  const baseStyles = 'card-tag !inline-flex !items-center';
-
   const variants = {
-    brand: {
-      '--bg': 'rgb(var(--primary))',
-      '--text': 'rgb(var(--primary-fg))',
-    },
-    success: {
-      '--bg': 'rgb(var(--success))',
-      '--text': 'rgb(var(--success-fg))',
-    },
-    warning: {
-      '--bg': 'rgb(var(--warning))',
-      '--text': 'rgb(var(--warning-fg))',
-    },
-    danger: {
-      '--bg': 'rgb(var(--danger))',
-      '--text': '#ffffff',
-    },
-    info: {
-      '--bg': 'rgb(var(--info))',
-      '--text': '#ffffff',
-    },
-    muted: {
-      '--bg': 'rgb(var(--bg-surface-elevated))',
-      '--text': 'rgb(var(--text-secondary))',
-    },
+    brand: 'bg-brand-primary text-white shadow-sm shadow-emerald-500/20',
+    success: 'bg-emerald-50 text-emerald-600 border border-emerald-200/50',
+    warning: 'bg-amber-50 text-amber-600 border border-amber-200/50',
+    danger: 'bg-red-50 text-red-600 border border-red-200/50',
+    info: 'bg-blue-50 text-blue-600 border border-blue-200/50',
+    muted: 'bg-slate-100 text-slate-600 border border-slate-200/50',
   };
 
   const selectedVariantStyle = variants[variant] || variants.brand;
 
   return (
     <span
-      style={{ ...selectedVariantStyle, ...props.style }}
-      className={cn(baseStyles, className)}
+      className={cn(
+        'inline-flex items-center justify-center rounded-full px-2.5 py-1 text-xs font-bold uppercase tracking-wider',
+        selectedVariantStyle,
+        className
+      )}
       {...props}
     >
       {children}
