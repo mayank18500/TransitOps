@@ -18,3 +18,12 @@ export const login = async (req, res) => {
     res.status(500).json({ message: 'Internal server error', error: error.message });
   }
 };
+export const getMe = async (req, res) => {
+  try {
+    const user = await authService.getUserById(req.user.userId);
+    res.status(200).json({ user });
+  } catch (error) {
+    console.error('GetMe error:', error);
+    res.status(500).json({ message: 'Internal server error', error: error.message });
+  }
+};
