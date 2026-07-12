@@ -6,25 +6,25 @@ const AuthContext = createContext(null);
 export const DEMO_USERS = [
   {
     email: 'manager@transitops.com',
-    password: 'password123',
+    password: 'test1234',
     name: 'Sarah Jenkins',
     role: 'Fleet Manager',
   },
   {
     email: 'dispatcher@transitops.com',
-    password: 'password123',
+    password: 'test1234',
     name: 'Marcus Vance',
     role: 'Dispatcher',
   },
   {
     email: 'safety@transitops.com',
-    password: 'password123',
+    password: 'test1234',
     name: 'Elena Rostova',
     role: 'Safety Officer',
   },
   {
-    email: 'analyst@transitops.com',
-    password: 'password123',
+    email: 'finance@transitops.com',
+    password: 'test1234',
     name: 'David Kross',
     role: 'Financial Analyst',
   },
